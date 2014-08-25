@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">The Biggest Saver</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <!--types of saving-->
+    <string-array name="types_of_saving">
+        <item name="biketravel">Travel more by bike</item>
+        <item name="budgetchristmas">Set a spending limit on Holidays</item>
+        <item name="buyinbluk">Buy staples in bulk</item>
+        <item name="carpool">Car pool</item>
+        <item name="cookfood">Cook at home</item>
+        <item name="creditcard">Avoid credit card interest</item>
+        <item name="dailychange">Save small change</item>
+        <item name="drinkless">Drink less</item>
+        <item name="entertainathome">Entertain at home</item>
+        <item name="homemadegifts">Give home made gifts</item>
+        <item name="lessamazon">Spend less on Amazon</item>
+        <item name="lesscocktail">Drink less expensive drinks</item>
+        <item name="lessclothes">Buy less clothes</item>
+        <item name="lessshopping">Cut down on shopping</item>
+        <item name="lesscoffee">Less takeaway coffee</item>
+        <item name="lessproducts">Buy less beauty products</item>
+        <item name="lessshoes">Buy less shoes</item>
+        <item name="lesssweettreats">Less sweet treats</item>
+        <item name="lesstakeout">Less takeaway meals</item>
+        <item name="makecoffeeathome">Make coffee at home</item>
+        <item name="moviesathome">Watch movies at home</item>
+        <item name="planeticket">Shop around for cheaper travel</item>
+        <item name="refurbishedtech">Buy refurbished gadgets over new ones</item>
+        <item name="secondhandclothes">Buy secondhand clothes</item>
+        <item name="suit">Buy expensive but essential items in the sales</item>
+        <item name="takelunch">Make lunch at home and take it with you</item>
+        <item name="tie">Find a cheaper alternative to labeled brands</item>
+        <item name="walknottaxi">Walk rather than taking taxis</item>
+    </string-array>
+
+
+</resources>
