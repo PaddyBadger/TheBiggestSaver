@@ -1,35 +1,41 @@
 package com.thebiggestsaver.activities;
 
 import android.app.Activity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
+import com.google.gson.Gson;
 import com.thebiggestsaver.R;
+import com.thebiggestsaver.actionbars.BackBar;
 import com.thebiggestsaver.adapters.SavingListAdapter;
-import com.thebiggestsaver.adapters.SavingPagerAdapter;
-import com.thebiggestsaver.models.Savings;
-
+import com.thebiggestsaver.fragments.SavingTypeFragment;
+import com.thebiggestsaver.models.SavingsRecord;
+import com.thebiggestsaver.models.SavingsType;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 
-public class SavingActivity extends Activity {
+public class SavingActivity extends FragmentActivity {
 
-    private View rootView;
-    private SavingListAdapter savingListAdapter;
-    private RecyclerView recyclerView;
-    private ArrayList<Savings> savingsList = new ArrayList<Savings>();
+    private final int NUM_CARDS = 32;
+    public SavingListAdapter savingListAdapter;
+    public RecyclerView recyclerView;
+    private static String ARG_NUMBER = "position";
+    private static String SAVINGS_RECORDS = "savings_reocords";
+    public ArrayList<SavingsType> savingsList = new ArrayList<SavingsType>();
     ViewPager savingViewPager;
-    SavingPagerAdapter savingPagerAdapter;
+    public List<SavingsType> savings;
+    public ArrayList<SavingsRecord> savingsRecords = new ArrayList<SavingsRecord>();
 
     public static void getLaunchIntent(Context context)
     {
@@ -42,35 +48,66 @@ public class SavingActivity extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saving_phone);
-        ButterKnife.inject(this, rootView);
+        ButterKnife.inject(this);
 
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.signup_list);
-        List<Savings> savings = new ArrayList<Savings>();
+        if(savedInstanceState != null)
+        {
+            ArrayList<String> savingsSoFar = savedInstanceState.getStringArrayList(SAVINGS_RECORDS);
+            Gson gson = new Gson();
+            for (String s : savingsSoFar) {
+                SavingsRecord savingsRecord = gson.fromJson(s, SavingsRecord.class);
+                savingsRecords.add(savingsRecord);
+            }
+        }
 
-        savingListAdapter = new SavingListAdapter(this, savings, R.layout.savings_pager);
+        recyclerView = (RecyclerView) findViewById(R.id.signup_list);
+        savings = new ArrayList<SavingsType>();
+
+        new BackBar(this, "Where Can You Save?");
+
+        savingListAdapter = new SavingListAdapter(this, savingsRecords, R.layout.savings_recycler_view);
         recyclerView.setAdapter(savingListAdapter);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
+
+        setTopPager();
     }
 
     public void setTopPager()
     {
-        Savings bike = new Savings();
-        Bitmap bikeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.pink_bike);
-        bike.setIcon(bikeIcon);
-        bike.setTitle("Biking to work");
-
-        Savings coffee = new Savings();
-        Bitmap coffeeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.yellow_coffee);
-        coffee.setIcon(coffeeIcon);
-        coffee.setTitle("Buy less takaway coffee");
-
-        savingsList.add(bike);
-        savingsList.add(coffee);
-
-        savingPagerAdapter = new SavingPagerAdapter(this, savingsList);
+        SavingPagerAdapter savingPagerAdapter = new SavingPagerAdapter(getSupportFragmentManager());
         savingViewPager = (ViewPager) findViewById(R.id.savings_pager);
+        savingViewPager.setAdapter(savingPagerAdapter);
     }
+
+    public class SavingPagerAdapter extends FragmentStatePagerAdapter
+    {
+        public SavingPagerAdapter(FragmentManager fm)
+        {
+            super(fm);
+        }
+
+        public Fragment getItem(int position)
+        {
+            Fragment fragment = new SavingTypeFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_NUMBER, position);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public int getCount()
+        {
+            return NUM_CARDS;
+        }
+    }
+
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState)
+//    {
+//        outState.putParcelableArrayList(SAVINGS_RECORDS, savingListAdapter.getSavingsList());
+//        super.onSaveInstanceState(outState);
+//    }
 }

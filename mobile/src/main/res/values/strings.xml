@@ -10,12 +10,15 @@
         <item name="biketravel">Travel more by bike</item>
         <item name="budgetchristmas">Set a spending limit on Holidays</item>
         <item name="buyinbluk">Buy staples in bulk</item>
+        <item name="cancelunreadsubscriptions">Cancel Unread Magazine Subscriptions</item>
         <item name="carpool">Car pool</item>
         <item name="cookfood">Cook at home</item>
         <item name="creditcard">Avoid credit card interest</item>
         <item name="dailychange">Save small change</item>
         <item name="drinkless">Drink less</item>
         <item name="entertainathome">Entertain at home</item>
+        <item name="excerciseforfree">Excercise for Free</item>
+        <item name="homegym">Build a Home Gym</item>
         <item name="homemadegifts">Give home made gifts</item>
         <item name="lessamazon">Spend less on Amazon</item>
         <item name="lesscocktail">Drink less expensive drinks</item>
@@ -31,11 +34,46 @@
         <item name="planeticket">Shop around for cheaper travel</item>
         <item name="refurbishedtech">Buy refurbished gadgets over new ones</item>
         <item name="secondhandclothes">Buy secondhand clothes</item>
+        <item name="subscriptionsforregularmags">Get a Subscription for Magazines You Buy Every Month</item>
         <item name="suit">Buy expensive but essential items in the sales</item>
         <item name="takelunch">Make lunch at home and take it with you</item>
         <item name="tie">Find a cheaper alternative to labeled brands</item>
         <item name="walknottaxi">Walk rather than taking taxis</item>
     </string-array>
 
-
+    <!--types of saving short titles-->
+    <string-array name="types_of_saving_short_titles">
+        <item name="biketravel">biketravel</item>
+        <item name="budgetchristmas">budgetchristmas</item>
+        <item name="buyinbluk">buyinbulk</item>
+        <item name="cancelunreadsubscriptions">cancelunreadsubscriptions</item>
+        <item name="carpool">carpool</item>
+        <item name="cookfood">cookfood</item>
+        <item name="creditcard">creditcard</item>
+        <item name="dailychange">dailychange</item>
+        <item name="drinkless">drinkless</item>
+        <item name="entertainathome">entertainathome</item>
+        <item name="excerciseforfree">excerciseforfree</item>
+        <item name="homegym">homegym</item>
+        <item name="homemadegifts">homemadegifts</item>
+        <item name="lessamazon">lessamazon</item>
+        <item name="lesscocktail">lesscocktail</item>
+        <item name="lessclothes">lessclothes</item>
+        <item name="lessshopping">lessshopping</item>
+        <item name="lesscoffee">lesscoffee</item>
+        <item name="lessproducts">lessproducts</item>
+        <item name="lessshoes">lessshoes</item>
+        <item name="lesssweettreats">lesssweettreats</item>
+        <item name="lesstakeout">lesstakeout</item>
+        <item name="makecoffeeathome">makecoffeeathome</item>
+        <item name="moviesathome">moviesathome</item>
+        <item name="planeticket">planeticket</item>
+        <item name="refurbishedtech">refurbishedtech</item>
+        <item name="secondhandclothes">secondhandclothes</item>
+        <item name="subscriptionsforregularmags">subscriptionsforregularmags</item>
+        <item name="suit">suit</item>
+        <item name="takelunch">takelunch</item>
+        <item name="tie">tie</item>
+        <item name="walknotaxi">walknotaxi</item>
+    </string-array>
 </resources>

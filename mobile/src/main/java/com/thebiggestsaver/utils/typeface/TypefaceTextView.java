@@ -22,7 +22,7 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import com.thebiggestsaver.thebiggestsaver.R;
+import com.thebiggestsaver.R;
 
 
 /**
