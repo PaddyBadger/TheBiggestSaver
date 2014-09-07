@@ -54,6 +54,7 @@ public class SavingTypeFragment extends Fragment {
             public void onClick(View view) {
                 SavingsRecord savingRecord = new SavingsRecord();
                 savingRecord.setTitle(savingsTypeList.get(position).getTitle());
+                savingRecord.setSavingsTypeId(savingsTypeList.get(position).getId());
                 savingRecord.setSavingsType(savingsTypeList.get(position));
                 savingRecord.setId(savingsTypeList.get(position).getTitle());
                 ((SavingActivity)getActivity()).savingListAdapter.add(savingRecord, 0);

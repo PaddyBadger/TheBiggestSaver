@@ -1,8 +1,5 @@
 package com.thebiggestsaver.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.Date;
 import java.util.Map;
 
@@ -12,6 +9,7 @@ import java.util.Map;
 public class SavingsRecord {
 
     private SavingsType savingsType;
+    private String savingsTypeId;
     private String id;
     private Map<Date, Integer> todaysSavings;
     private float amountSavedEachTime;
@@ -26,6 +24,15 @@ public class SavingsRecord {
     public void setSavingsType(SavingsType savingsType) {
         this.savingsType = savingsType;
     }
+
+    public String getSavingsTypeId() {
+        return savingsTypeId;
+    }
+
+    public void setSavingsTypeId(String savingsTypeString) {
+        this.savingsTypeId = savingsTypeString;
+    }
+
 
     public String getId() {
         return id;
@@ -73,5 +80,18 @@ public class SavingsRecord {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public com.thebiggestsaver.databases.SavingsRecord makeDatabaseSavingsRecord(){
+        com.thebiggestsaver.databases.SavingsRecord databaseSavingsRecord = new com.thebiggestsaver.databases.SavingsRecord();
+        databaseSavingsRecord.id = id;
+        databaseSavingsRecord.savingsTypeId = savingsTypeId;
+        databaseSavingsRecord.todaysSavings = todaysSavings;
+        databaseSavingsRecord.amountSavedEachTime = amountSavedEachTime;
+        databaseSavingsRecord.expectedFrequency = expectedFrequency;
+        databaseSavingsRecord.dailyWeelklyMonthly = dailyWeelklyMonthly;
+        databaseSavingsRecord.title = title;
+
+        return databaseSavingsRecord;
     }
 }

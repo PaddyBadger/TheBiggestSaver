@@ -31,6 +31,7 @@ public class SavingsTypeHelper
             savingType.setTitle(savingsTypeArray[position]);
 
             String iconString = savingsTypeArrayShortTitles[position];
+            savingType.setId(savingsTypeArrayShortTitles[position]);
             int iconId = context.getResources().getIdentifier(iconString, "drawable", context.getPackageName());
 
             savingType.setIcon(context.getResources().getDrawable(iconId));

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="magicthreads">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/mobile/libs/magicthreads.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/mobile/libs/magicthreads-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
