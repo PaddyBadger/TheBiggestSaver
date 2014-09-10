@@ -50,16 +50,6 @@ public class SavingActivity extends FragmentActivity {
         setContentView(R.layout.activity_saving_phone);
         ButterKnife.inject(this);
 
-        if(savedInstanceState != null)
-        {
-            ArrayList<String> savingsSoFar = savedInstanceState.getStringArrayList(SAVINGS_RECORDS);
-            Gson gson = new Gson();
-            for (String s : savingsSoFar) {
-                SavingsRecord savingsRecord = gson.fromJson(s, SavingsRecord.class);
-                savingsRecords.add(savingsRecord);
-            }
-        }
-
         recyclerView = (RecyclerView) findViewById(R.id.signup_list);
         savings = new ArrayList<SavingsType>();
 
@@ -103,11 +93,4 @@ public class SavingActivity extends FragmentActivity {
             return NUM_CARDS;
         }
     }
-
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState)
-//    {
-//        outState.putParcelableArrayList(SAVINGS_RECORDS, savingListAdapter.getSavingsList());
-//        super.onSaveInstanceState(outState);
-//    }
 }

@@ -2,6 +2,7 @@ package com.thebiggestsaver.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v7.graphics.Palette;
@@ -35,6 +36,10 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
     public ArrayList<SavingsRecord> savings = new ArrayList<SavingsRecord>();
     private Context context;
     private int itemLayout;
+    private Drawable nextIcon;
+    private Drawable deleteIcon;
+    private Drawable acceptIcon;
+    private Drawable backIcon;
 
     public SavingListAdapter(Context context, ArrayList<SavingsRecord> savings, int itemLayout) {
         super();
@@ -55,23 +60,22 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         viewHolder.text.setText(item.getTitle());
         Drawable icon = item.getSavingsType().getIcon();
         viewHolder.image.setImageDrawable(icon);
-        final Drawable nextIcon = item.getSavingsType().getNext();
-        final Drawable deleteIcon = item.getSavingsType().getDelete();
-        final Drawable backIcon = item.getSavingsType().getBack();
-        final Drawable acceptIcon = item.getSavingsType().getAccept();
+        nextIcon = item.getSavingsType().getNext();
+        deleteIcon = item.getSavingsType().getDelete();
+        backIcon = item.getSavingsType().getBack();
+        acceptIcon = item.getSavingsType().getAccept();
 
+      //  viewHolder.savingsView.setBackgroundColor(vibrantColor.getRgb());
+
+        viewHolder.nextIcon.setImageDrawable(null);
         if (i == 0) {
             viewHolder.nextIcon.setImageDrawable(nextIcon);
-
-            TranslateAnimation anim = new TranslateAnimation(0, 0, -1000, 0);
-            anim.setDuration(1000);
-            anim.setInterpolator(new BounceInterpolator());
-            anim.setRepeatCount(0);
-            anim.setFillAfter(true);
+            TranslateAnimation anim = bounceFromAbove();
             viewHolder.nextIcon.startAnimation(anim);
         } else {
             viewHolder.nextIcon.setImageDrawable(nextIcon);
         }
+        nextOnClick(viewHolder, backIcon, acceptIcon);
 
         viewHolder.deleteIcon.setImageDrawable(null);
         if (i == 0) {
@@ -80,24 +84,7 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
                 public void run() {
 
                     viewHolder.deleteIcon.setImageDrawable(deleteIcon);
-
-                    AnimationSet rollingLeft = new AnimationSet(true);
-                    rollingLeft.setFillEnabled(true);
-
-                    TranslateAnimation movingLeft = new TranslateAnimation(940, 0, 0, 0);
-                    movingLeft.setFillAfter(true);
-                    movingLeft.setDuration(2000);
-                    movingLeft.setRepeatCount(0);
-
-                    RotateAnimation rolling = new RotateAnimation(359, 0, Animation.RELATIVE_TO_SELF, 0.5255f,
-                            Animation.RELATIVE_TO_SELF, 0.5255f);
-                    rolling.setDuration(400);
-                    rolling.setInterpolator(new LinearInterpolator());
-                    rolling.setFillAfter(true);
-                    rolling.setRepeatCount(3);
-
-                    rollingLeft.addAnimation(rolling);
-                    rollingLeft.addAnimation(movingLeft);
+                    AnimationSet rollingLeft = rollingLeftCall();
                     viewHolder.deleteIcon.startAnimation(rollingLeft);
 
                 }
@@ -113,43 +100,35 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
             }
         });
 
-        viewHolder.nextIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewHolder.nextIcon.setVisibility(View.GONE);
-                viewHolder.deleteIcon.setVisibility(View.GONE);
-                viewHolder.text.setVisibility(View.GONE);
-                viewHolder.savingsView.setVisibility(View.VISIBLE);
+        backOnClick(viewHolder);
 
-                slidingAnimation(viewHolder, 1000, 0);
-                bouncingAnimation(viewHolder, acceptIcon);
-                rollingAnimation(viewHolder, backIcon);
-            }
-        });
+    }
 
+    private void backOnClick(final ViewHolder viewHolder) {
         viewHolder.backIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
 
-                slidingAnimation(viewHolder, 0, 1200);
-
+                TranslateAnimation anim = new TranslateAnimation(0, 1200, 0, 0);
+                anim.setDuration(1000);
+                anim.setInterpolator(new LinearInterpolator());
+                anim.setRepeatCount(0);
+                anim.setFillAfter(false);
+                viewHolder.savingsView.startAnimation(anim);
                 viewHolder.text.setVisibility(View.VISIBLE);
+
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         viewHolder.savingsView.setVisibility(View.GONE);
-                        viewHolder.backIcon.setVisibility(View.GONE);
                         viewHolder.acceptIcon.setVisibility(View.GONE);
+                        viewHolder.backIcon.setVisibility(View.GONE);
 
                         viewHolder.nextIcon.setVisibility(View.VISIBLE);
-
-                        TranslateAnimation bounceAnim = new TranslateAnimation(0, 0, -1000, 0);
-                        bounceAnim.setDuration(1000);
-                        bounceAnim.setInterpolator(new BounceInterpolator());
-                        bounceAnim.setRepeatCount(0);
-                        bounceAnim.setFillAfter(true);
+                        TranslateAnimation bounceAnim = bounceFromAbove();
                         viewHolder.nextIcon.startAnimation(bounceAnim);
+                        nextOnClick(viewHolder, backIcon, acceptIcon);
                     }
                 }, 1000);
 
@@ -157,91 +136,85 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
                     @Override
                     public void run() {
                         viewHolder.deleteIcon.setVisibility(View.VISIBLE);
-
-                        AnimationSet rollingLeft = new AnimationSet(true);
-                        rollingLeft.setFillEnabled(true);
-
-                        TranslateAnimation movingLeft = new TranslateAnimation(940, 0, 0, 0);
-                        movingLeft.setFillAfter(true);
-                        movingLeft.setDuration(2000);
-                        movingLeft.setRepeatCount(0);
-
-                        RotateAnimation rolling = new RotateAnimation(359, 0, Animation.RELATIVE_TO_SELF, 0.5255f,
-                                Animation.RELATIVE_TO_SELF, 0.5255f);
-                        rolling.setDuration(400);
-                        rolling.setInterpolator(new LinearInterpolator());
-                        rolling.setFillAfter(true);
-                        rolling.setRepeatCount(3);
-
-                        rollingLeft.addAnimation(rolling);
-                        rollingLeft.addAnimation(movingLeft);
+                        AnimationSet rollingLeft = rollingLeftCall();
                         viewHolder.deleteIcon.startAnimation(rollingLeft);
 
                     }
                 }, 2000);
             }
         });
-
-
-//        Palette p = Palette.generate(icon, 24);
-//        final PaletteItem darkVibrantColor = p.getDarkVibrantColor();
-//        viewHolder.text.setBackgroundColor(darkVibrantColor.getRgb());
-
     }
 
-    private void rollingAnimation(final ViewHolder viewHolder, final Drawable backIcon) {
-        new Handler().postDelayed(new Runnable() {
+    private void nextOnClick(final ViewHolder viewHolder, final Drawable backIcon, final Drawable acceptIcon) {
+        viewHolder.nextIcon.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                viewHolder.backIcon.setImageDrawable(backIcon);
+            public void onClick(View view) {
 
-                AnimationSet rollingLeft = new AnimationSet(true);
-                rollingLeft.setFillEnabled(true);
+                view.setVisibility(View.GONE);
+                viewHolder.deleteIcon.setVisibility(View.GONE);
+                viewHolder.text.setVisibility(View.GONE);
+                viewHolder.savingsView.setVisibility(View.VISIBLE);
 
-                TranslateAnimation movingLeft = new TranslateAnimation(940, 0, 0, 0);
-                movingLeft.setFillAfter(true);
-                movingLeft.setDuration(2000);
-                movingLeft.setRepeatCount(0);
+                TranslateAnimation anim = new TranslateAnimation(1000, 0, 0, 0);
+                anim.setDuration(1000);
+                anim.setInterpolator(new LinearInterpolator());
+                anim.setRepeatCount(0);
+                anim.setFillAfter(false);
+                viewHolder.savingsView.startAnimation(anim);
+                viewHolder.acceptIcon.setImageDrawable(null);
 
-                RotateAnimation rolling = new RotateAnimation(359, 0, Animation.RELATIVE_TO_SELF, 0.5255f,
-                        Animation.RELATIVE_TO_SELF, 0.5255f);
-                rolling.setDuration(400);
-                rolling.setInterpolator(new LinearInterpolator());
-                rolling.setFillAfter(true);
-                rolling.setRepeatCount(3);
-
-                rollingLeft.addAnimation(rolling);
-                rollingLeft.addAnimation(movingLeft);
-                viewHolder.backIcon.startAnimation(rollingLeft);
-
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewHolder.nextIcon.setVisibility(View.GONE);
+                        viewHolder.acceptIcon.setImageDrawable(acceptIcon);
+                        viewHolder.acceptIcon.setVisibility(View.VISIBLE);
+                        TranslateAnimation bounceAnim = bounceFromAbove();
+                        viewHolder.acceptIcon.startAnimation(bounceAnim);
+                    }
+                }, 1000);
+                viewHolder.backIcon.setImageDrawable(null);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewHolder.backIcon.setImageDrawable(backIcon);
+                        viewHolder.backIcon.setVisibility(View.VISIBLE);
+                        AnimationSet rollingLeft = rollingLeftCall();
+                        viewHolder.backIcon.startAnimation(rollingLeft);
+                    }
+                }, 2000);
             }
-        }, 2000);
+        });
     }
 
-    private void slidingAnimation(ViewHolder viewHolder, int start, int finish) {
-        TranslateAnimation anim = new TranslateAnimation(start, finish, 0, 0);
-        anim.setDuration(1000);
-        anim.setInterpolator(new LinearInterpolator());
-        anim.setRepeatCount(0);
-        anim.setFillAfter(true);
-        viewHolder.savingsView.startAnimation(anim);
+    private TranslateAnimation bounceFromAbove() {
+        TranslateAnimation bounceAnim = new TranslateAnimation(0, 0, -1000, 0);
+        bounceAnim.setDuration(1000);
+        bounceAnim.setInterpolator(new BounceInterpolator());
+        bounceAnim.setRepeatCount(0);
+        bounceAnim.setFillAfter(false);
+        return bounceAnim;
     }
 
-    private void bouncingAnimation(final ViewHolder viewHolder, final Drawable acceptIcon) {
-        new Handler().postDelayed(new Runnable() {
-        @Override
-        public void run() {
+    private AnimationSet rollingLeftCall() {
+        AnimationSet rollingLeft = new AnimationSet(true);
+        rollingLeft.setFillEnabled(true);
 
-            viewHolder.acceptIcon.setImageDrawable(acceptIcon);
+        TranslateAnimation movingLeft = new TranslateAnimation(940, 0, 0, 0);
+        movingLeft.setFillAfter(true);
+        movingLeft.setDuration(2000);
+        movingLeft.setRepeatCount(0);
 
-            TranslateAnimation bounceAnim = new TranslateAnimation(0, 0, -1000, 0);
-            bounceAnim.setDuration(1000);
-            bounceAnim.setInterpolator(new BounceInterpolator());
-            bounceAnim.setRepeatCount(0);
-            bounceAnim.setFillAfter(true);
-            viewHolder.acceptIcon.startAnimation(bounceAnim);
-        }
-    }, 1000);
+        RotateAnimation rolling = new RotateAnimation(359, 0, Animation.RELATIVE_TO_SELF, 0.5255f,
+                Animation.RELATIVE_TO_SELF, 0.5255f);
+        rolling.setDuration(400);
+        rolling.setInterpolator(new LinearInterpolator());
+        rolling.setFillAfter(false);
+        rolling.setRepeatCount(3);
+
+        rollingLeft.addAnimation(rolling);
+        rollingLeft.addAnimation(movingLeft);
+        return rollingLeft;
     }
 
     @Override
