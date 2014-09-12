@@ -3,6 +3,7 @@ package com.thebiggestsaver.helpers;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 
 import com.thebiggestsaver.R;
@@ -32,8 +33,8 @@ public class SavingsTypeHelper
 
             String iconString = savingsTypeArrayShortTitles[position];
             savingType.setId(savingsTypeArrayShortTitles[position]);
-            int iconId = context.getResources().getIdentifier(iconString, "drawable", context.getPackageName());
 
+            int iconId = context.getResources().getIdentifier(iconString, "drawable", context.getPackageName());
             savingType.setIcon(context.getResources().getDrawable(iconId));
 
             String addDrawable = savingsTypeArrayShortTitles[position]+"add";

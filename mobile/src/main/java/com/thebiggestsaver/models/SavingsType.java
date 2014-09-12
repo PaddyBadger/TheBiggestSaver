@@ -1,6 +1,8 @@
 package com.thebiggestsaver.models;
 
 import android.graphics.Bitmap;
+
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
 

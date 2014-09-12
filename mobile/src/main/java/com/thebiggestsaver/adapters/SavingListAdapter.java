@@ -65,7 +65,9 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         backIcon = item.getSavingsType().getBack();
         acceptIcon = item.getSavingsType().getAccept();
 
-      //  viewHolder.savingsView.setBackgroundColor(vibrantColor.getRgb());
+        String colorIdString = item.getSavingsType().getId();
+        int colorInt = context.getResources().getIdentifier(colorIdString, "color", context.getPackageName());
+        viewHolder.sliderView.setBackgroundColor(colorInt);
 
         viewHolder.nextIcon.setImageDrawable(null);
         if (i == 0) {
@@ -241,6 +243,7 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         public RelativeLayout savingsView;
         public ImageView backIcon;
         public ImageView acceptIcon;
+        public View sliderView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -249,6 +252,7 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
             nextIcon = (ImageView) itemView.findViewById(R.id.next_icon);
             deleteIcon = (ImageView) itemView.findViewById(R.id.delete_icon);
             savingsView = (RelativeLayout) itemView.findViewById(R.id.slider_second_page);
+            sliderView = itemView.findViewById(R.id.slider_second_page_backdrop);
             backIcon = (ImageView) itemView.findViewById(R.id.back_icon);
             acceptIcon = (ImageView) itemView.findViewById(R.id.accept_icon);
         }
