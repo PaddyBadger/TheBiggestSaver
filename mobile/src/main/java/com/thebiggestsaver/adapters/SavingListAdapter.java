@@ -2,6 +2,7 @@ package com.thebiggestsaver.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,13 +29,15 @@ import com.thebiggestsaver.models.SavingsRecord;
 import com.thebiggestsaver.models.SavingsType;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by patriciaestridge on 8/21/14.
  */
 public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.ViewHolder> {
-    public ArrayList<SavingsRecord> savings = new ArrayList<SavingsRecord>();
+    public List<SavingsRecord> savings = new ArrayList<SavingsRecord>();
     private Context context;
     private int itemLayout;
     private Drawable nextIcon;
@@ -41,7 +45,7 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
     private Drawable acceptIcon;
     private Drawable backIcon;
 
-    public SavingListAdapter(Context context, ArrayList<SavingsRecord> savings, int itemLayout) {
+    public SavingListAdapter(Context context, List<SavingsRecord> savings, int itemLayout) {
         super();
         this.context = context;
         this.savings = savings;
@@ -67,7 +71,38 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
 
         String colorIdString = item.getSavingsType().getId();
         int colorInt = context.getResources().getIdentifier(colorIdString, "color", context.getPackageName());
-        viewHolder.sliderView.setBackgroundColor(colorInt);
+        String colorString = context.getResources().getString(colorInt);
+        String[] colorStringArray = colorString.split("");
+
+        StringBuilder fiftyOpacity = new StringBuilder();
+
+        for (int j = 0; j < colorStringArray.length; j++)
+        {
+            if (j == 2)
+            {
+                colorStringArray[j] = "B";
+            }
+
+            if (j == 3)
+            {
+                colorStringArray[j] = "3";
+            }
+
+            if (j > 0)
+            {
+                fiftyOpacity.append(colorStringArray[j]);
+            }
+        }
+
+        colorString = fiftyOpacity.toString();
+
+        viewHolder.sliderView.setBackgroundColor(Color.parseColor(colorString));
+        viewHolder.acceptIcon.setImageDrawable(null);
+        viewHolder.backIcon.setImageDrawable(null);
+        viewHolder.backIcon.setImageDrawable(backIcon);
+        viewHolder.acceptIcon.setImageDrawable(acceptIcon);
+
+        setNumberPickers(viewHolder);
 
         viewHolder.nextIcon.setImageDrawable(null);
         if (i == 0) {
@@ -118,6 +153,8 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
                 anim.setFillAfter(false);
                 viewHolder.savingsView.startAnimation(anim);
                 viewHolder.text.setVisibility(View.VISIBLE);
+                viewHolder.nextIcon.setVisibility(View.VISIBLE);
+                viewHolder.deleteIcon.setVisibility(View.VISIBLE);
 
 
                 new Handler().postDelayed(new Runnable() {
@@ -127,22 +164,10 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
                         viewHolder.acceptIcon.setVisibility(View.GONE);
                         viewHolder.backIcon.setVisibility(View.GONE);
 
-                        viewHolder.nextIcon.setVisibility(View.VISIBLE);
-                        TranslateAnimation bounceAnim = bounceFromAbove();
-                        viewHolder.nextIcon.startAnimation(bounceAnim);
+
                         nextOnClick(viewHolder, backIcon, acceptIcon);
                     }
                 }, 1000);
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewHolder.deleteIcon.setVisibility(View.VISIBLE);
-                        AnimationSet rollingLeft = rollingLeftCall();
-                        viewHolder.deleteIcon.startAnimation(rollingLeft);
-
-                    }
-                }, 2000);
             }
         });
     }
@@ -163,30 +188,40 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
                 anim.setRepeatCount(0);
                 anim.setFillAfter(false);
                 viewHolder.savingsView.startAnimation(anim);
-                viewHolder.acceptIcon.setImageDrawable(null);
+                viewHolder.acceptIcon.setVisibility(View.VISIBLE);
+                viewHolder.backIcon.setVisibility(View.VISIBLE);
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewHolder.nextIcon.setVisibility(View.GONE);
-                        viewHolder.acceptIcon.setImageDrawable(acceptIcon);
-                        viewHolder.acceptIcon.setVisibility(View.VISIBLE);
-                        TranslateAnimation bounceAnim = bounceFromAbove();
-                        viewHolder.acceptIcon.startAnimation(bounceAnim);
-                    }
-                }, 1000);
-                viewHolder.backIcon.setImageDrawable(null);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewHolder.backIcon.setImageDrawable(backIcon);
-                        viewHolder.backIcon.setVisibility(View.VISIBLE);
-                        AnimationSet rollingLeft = rollingLeftCall();
-                        viewHolder.backIcon.startAnimation(rollingLeft);
-                    }
-                }, 2000);
             }
         });
+    }
+
+    private void setNumberPickers(ViewHolder viewHolder)
+    {
+        viewHolder.frequency.setMaxValue(25);
+        viewHolder.frequency.setMinValue(0);
+
+        Locale locale = context.getResources().getConfiguration().locale;
+        Currency localCurrency = Currency.getInstance(locale);
+        String currencySymbol = localCurrency.getSymbol(locale);
+
+        String[] savingsAmounts = new String[300];
+        for (int i = 0; i < 300; i++) {
+            double amount = i * 0.50;
+            savingsAmounts[i] = currencySymbol + Double.toString(amount)+"0";
+        }
+        viewHolder.amountSaved.setMaxValue(savingsAmounts.length-1);
+        viewHolder.amountSaved.setMinValue(0);
+        viewHolder.amountSaved.setDisplayedValues(savingsAmounts);
+
+        String[] frequencyValuesArray = new String[] {
+                "Daily",
+                "Weekly",
+                "Monthly",
+                "Yearly"
+        };
+        viewHolder.frequencyString.setMaxValue(frequencyValuesArray.length-1);
+        viewHolder.frequencyString.setMinValue(0);
+        viewHolder.frequencyString.setDisplayedValues(frequencyValuesArray);
     }
 
     private TranslateAnimation bounceFromAbove() {
@@ -244,6 +279,9 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         public ImageView backIcon;
         public ImageView acceptIcon;
         public View sliderView;
+        public NumberPicker amountSaved;
+        public NumberPicker frequency;
+        public NumberPicker frequencyString;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -255,10 +293,13 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
             sliderView = itemView.findViewById(R.id.slider_second_page_backdrop);
             backIcon = (ImageView) itemView.findViewById(R.id.back_icon);
             acceptIcon = (ImageView) itemView.findViewById(R.id.accept_icon);
+            amountSaved = (NumberPicker) itemView.findViewById(R.id.money_amount);
+            frequency = (NumberPicker) itemView.findViewById(R.id.numeric_frequency);
+            frequencyString = (NumberPicker) itemView.findViewById(R.id.text_frequency);
         }
     }
 
-    public ArrayList<SavingsRecord> getSavingsList() {
+    public List<SavingsRecord> getSavingsList() {
         return savings;
     }
 }

@@ -66,4 +66,9 @@ public class SavingsTypeHelper
         }
         return savingsTypeList;
     }
+
+    public List<SavingsType> getSavingsTypeList()
+    {
+        return savingsTypeList;
+    }
 }
