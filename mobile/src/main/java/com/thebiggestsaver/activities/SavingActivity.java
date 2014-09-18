@@ -1,22 +1,20 @@
 package com.thebiggestsaver.activities;
 
-import android.app.Activity;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.google.gson.Gson;
 import com.j256.ormlite.dao.Dao;
 import com.thebiggestsaver.R;
 import com.thebiggestsaver.actionbars.BackBar;
@@ -27,14 +25,11 @@ import com.thebiggestsaver.helpers.SavingsTypeHelper;
 import com.thebiggestsaver.models.SavingsRecord;
 import com.thebiggestsaver.models.SavingsType;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import co.touchlab.android.superbus.errorcontrol.PermanentException;
-import co.touchlab.android.threading.tasks.TaskQueue;
 
 public class SavingActivity extends FragmentActivity {
 
@@ -42,7 +37,7 @@ public class SavingActivity extends FragmentActivity {
     public SavingListAdapter savingListAdapter;
     public RecyclerView recyclerView;
     private static String ARG_NUMBER = "position";
-    private static String SAVINGS_RECORDS = "savings_reocords";
+    private static String SAVINGS_RECORDS = "savings_records";
     public ArrayList<SavingsType> savingsList = new ArrayList<SavingsType>();
     ViewPager savingViewPager;
     public List<SavingsType> savings;
@@ -61,6 +56,46 @@ public class SavingActivity extends FragmentActivity {
         ButterKnife.inject(this);
         context = this;
 
+        getSupportLoaderManager().initLoader(getClass().getName().hashCode(), null, new android.support.v4.app.LoaderManager.LoaderCallbacks<List<SavingsRecord>>()
+        {
+            @Override
+            public Loader<List<SavingsRecord>> onCreateLoader(int i,Bundle bundle){
+                List<SavingsRecord> storedSavingsRecords = new ArrayList<SavingsRecord>();
+                try {
+                    Dao<SavingsRecord, ?> dao = DatabaseHelper.getInstance(context).getDao(SavingsRecord.class);
+                    storedSavingsRecords = dao.queryForAll();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            public void onLoadFinished(Loader<List<SavingsRecord>> listLoader, List<SavingsRecord> savingsRecordsList)
+            {
+                SavingsTypeHelper savingsTypeHelper = new SavingsTypeHelper();
+                List<SavingsType> savingsTypeToAppend = savingsTypeHelper.savingsTypeHelperBuildList(context);
+
+                for (SavingsRecord storedSavingsRecord : savingsRecordsList)
+                {
+                    for (SavingsType savingsType : savingsTypeToAppend)
+                    {
+                        if (storedSavingsRecord.getId().equals(savingsType.getId()))
+                        {
+                            storedSavingsRecord.setSavingsType(savingsType);
+                        }
+                    }
+                }
+
+                savingsRecords = savingsRecordsList;
+            }
+
+            @Override
+            public void onLoaderReset(Loader<List<SavingsRecord>> listLoader)
+            {
+            }
+        });
+
         recyclerView = (RecyclerView) findViewById(R.id.signup_list);
         savings = new ArrayList<SavingsType>();
 
@@ -73,7 +108,6 @@ public class SavingActivity extends FragmentActivity {
         recyclerView.setHasFixedSize(true);
 
         setTopPager();
-
     }
 
     public void setTopPager() {
