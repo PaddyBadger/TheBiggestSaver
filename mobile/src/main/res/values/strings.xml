@@ -4,6 +4,7 @@
     <string name="app_name">The Biggest Saver</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_save">Save</string>
 
     <!--types of saving-->
     <string-array name="types_of_saving">

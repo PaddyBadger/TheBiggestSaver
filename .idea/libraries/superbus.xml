@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="superbus">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/mobile/libs/superbus.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/mobile/libs/superbus-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

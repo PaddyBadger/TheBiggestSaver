@@ -2,6 +2,8 @@ package com.thebiggestsaver.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v7.graphics.Palette;
@@ -18,6 +20,7 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,109 +29,233 @@ import com.thebiggestsaver.models.SavingsRecord;
 import com.thebiggestsaver.models.SavingsType;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by patriciaestridge on 8/21/14.
  */
 public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.ViewHolder> {
-    public ArrayList<SavingsRecord> savings = new ArrayList<SavingsRecord>();
+    public List<SavingsRecord> savings = new ArrayList<SavingsRecord>();
     private Context context;
     private int itemLayout;
+    private Drawable nextIcon;
+    private Drawable deleteIcon;
+    private Drawable acceptIcon;
+    private Drawable backIcon;
 
-    public SavingListAdapter(Context context, ArrayList<SavingsRecord> savings, int itemLayout)
-    {
+    public SavingListAdapter(Context context, List<SavingsRecord> savings, int itemLayout) {
         super();
         this.context = context;
         this.savings = savings;
         this.itemLayout = itemLayout;
     }
 
-    @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(itemLayout, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, int i) {
-        SavingsRecord item = savings.get(i);
+        final SavingsRecord item = savings.get(i);
         viewHolder.text.setText(item.getTitle());
         Drawable icon = item.getSavingsType().getIcon();
         viewHolder.image.setImageDrawable(icon);
-        final Drawable nextIcon = item.getSavingsType().getNext();
-        viewHolder.nextIcon.setImageDrawable(nextIcon);
-        final Drawable deleteIcon = item.getSavingsType().getDelete();
+        nextIcon = item.getSavingsType().getNext();
+        deleteIcon = item.getSavingsType().getDelete();
+        backIcon = item.getSavingsType().getBack();
+        acceptIcon = item.getSavingsType().getAccept();
 
-        if (i == 0)
+        String colorIdString = item.getSavingsType().getId();
+        int colorInt = context.getResources().getIdentifier(colorIdString, "color", context.getPackageName());
+        String colorString = context.getResources().getString(colorInt);
+        String[] colorStringArray = colorString.split("");
+
+        StringBuilder fiftyOpacity = new StringBuilder();
+
+        for (int j = 0; j < colorStringArray.length; j++)
         {
-            TranslateAnimation anim=new TranslateAnimation(0,0,-1000,0);
-            anim.setDuration(1000);
-            anim.setInterpolator(new BounceInterpolator());
-            anim.setRepeatCount(0);
-            anim.setFillAfter(true);
-            viewHolder.nextIcon.startAnimation(anim);
+            if (j == 2)
+            {
+                colorStringArray[j] = "B";
+            }
+
+            if (j == 3)
+            {
+                colorStringArray[j] = "3";
+            }
+
+            if (j > 0)
+            {
+                fiftyOpacity.append(colorStringArray[j]);
+            }
         }
 
-        viewHolder.nextIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        colorString = fiftyOpacity.toString();
 
-            }
-        });
+        viewHolder.sliderView.setBackgroundColor(Color.parseColor(colorString));
+        viewHolder.acceptIcon.setImageDrawable(null);
+        viewHolder.backIcon.setImageDrawable(null);
+        viewHolder.backIcon.setImageDrawable(backIcon);
+        viewHolder.acceptIcon.setImageDrawable(acceptIcon);
 
+        setNumberPickers(viewHolder);
 
+        viewHolder.nextIcon.setImageDrawable(null);
+        if (i == 0) {
+            viewHolder.nextIcon.setImageDrawable(nextIcon);
+            TranslateAnimation anim = bounceFromAbove();
+            viewHolder.nextIcon.startAnimation(anim);
+        } else {
+            viewHolder.nextIcon.setImageDrawable(nextIcon);
+        }
+        nextOnClick(viewHolder, backIcon, acceptIcon);
+
+        viewHolder.deleteIcon.setImageDrawable(null);
         if (i == 0) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
 
                     viewHolder.deleteIcon.setImageDrawable(deleteIcon);
-
-                    AnimationSet rollingLeft = new AnimationSet(true);
-                    rollingLeft.setFillEnabled(true);
-
-                    TranslateAnimation movingLeft = new TranslateAnimation(940, 0, 0, 0);
-                    movingLeft.setFillAfter(true);
-                    movingLeft.setDuration(2000);
-                    movingLeft.setRepeatCount(0);
-
-                    RotateAnimation rolling = new RotateAnimation(359, 0, Animation.RELATIVE_TO_SELF, 0.5255f,
-                            Animation.RELATIVE_TO_SELF, 0.5255f);
-                    rolling.setDuration(400);
-                    rolling.setInterpolator(new LinearInterpolator());
-                    rolling.setFillAfter(true);
-                    rolling.setRepeatCount(3);
-
-                    rollingLeft.addAnimation(rolling);
-                    rollingLeft.addAnimation(movingLeft);
+                    AnimationSet rollingLeft = rollingLeftCall();
                     viewHolder.deleteIcon.startAnimation(rollingLeft);
 
                 }
             }, 1000);
         } else {
-            viewHolder.deleteIcon.setImageDrawable(nextIcon);
+            viewHolder.deleteIcon.setImageDrawable(deleteIcon);
         }
 
-
-
-//        Palette p = Palette.generate(icon, 24);
-//        final PaletteItem darkVibrantColor = p.getDarkVibrantColor();
-//        viewHolder.text.setBackgroundColor(darkVibrantColor.getRgb());
-
-        viewHolder.itemView.setTag(item);
-
-        viewHolder.image.setOnClickListener(new View.OnClickListener()
-        {
+        viewHolder.deleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-//                Intent intent = new Intent(context, SecondActivity.class);
-//                context.startActivity(intent);
+            public void onClick(View view) {
+                remove(item);
+            }
+        });
+
+        backOnClick(viewHolder);
+
+    }
+
+    private void backOnClick(final ViewHolder viewHolder) {
+        viewHolder.backIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+
+                TranslateAnimation anim = new TranslateAnimation(0, 1200, 0, 0);
+                anim.setDuration(1000);
+                anim.setInterpolator(new LinearInterpolator());
+                anim.setRepeatCount(0);
+                anim.setFillAfter(false);
+                viewHolder.savingsView.startAnimation(anim);
+                viewHolder.text.setVisibility(View.VISIBLE);
+                viewHolder.nextIcon.setVisibility(View.VISIBLE);
+                viewHolder.deleteIcon.setVisibility(View.VISIBLE);
+
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewHolder.savingsView.setVisibility(View.GONE);
+                        viewHolder.acceptIcon.setVisibility(View.GONE);
+                        viewHolder.backIcon.setVisibility(View.GONE);
+
+
+                        nextOnClick(viewHolder, backIcon, acceptIcon);
+                    }
+                }, 1000);
             }
         });
     }
 
-    @Override public int getItemCount() {
+    private void nextOnClick(final ViewHolder viewHolder, final Drawable backIcon, final Drawable acceptIcon) {
+        viewHolder.nextIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                view.setVisibility(View.GONE);
+                viewHolder.deleteIcon.setVisibility(View.GONE);
+                viewHolder.text.setVisibility(View.GONE);
+                viewHolder.savingsView.setVisibility(View.VISIBLE);
+
+                TranslateAnimation anim = new TranslateAnimation(1000, 0, 0, 0);
+                anim.setDuration(1000);
+                anim.setInterpolator(new LinearInterpolator());
+                anim.setRepeatCount(0);
+                anim.setFillAfter(false);
+                viewHolder.savingsView.startAnimation(anim);
+                viewHolder.acceptIcon.setVisibility(View.VISIBLE);
+                viewHolder.backIcon.setVisibility(View.VISIBLE);
+
+            }
+        });
+    }
+
+    private void setNumberPickers(ViewHolder viewHolder)
+    {
+        viewHolder.frequency.setMaxValue(25);
+        viewHolder.frequency.setMinValue(0);
+
+        Locale locale = context.getResources().getConfiguration().locale;
+        Currency localCurrency = Currency.getInstance(locale);
+        String currencySymbol = localCurrency.getSymbol(locale);
+
+        String[] savingsAmounts = new String[300];
+        for (int i = 0; i < 300; i++) {
+            double amount = i * 0.50;
+            savingsAmounts[i] = currencySymbol + Double.toString(amount)+"0";
+        }
+        viewHolder.amountSaved.setMaxValue(savingsAmounts.length-1);
+        viewHolder.amountSaved.setMinValue(0);
+        viewHolder.amountSaved.setDisplayedValues(savingsAmounts);
+
+        String[] frequencyValuesArray = new String[] {
+                "Daily",
+                "Weekly",
+                "Monthly",
+                "Yearly"
+        };
+        viewHolder.frequencyString.setMaxValue(frequencyValuesArray.length-1);
+        viewHolder.frequencyString.setMinValue(0);
+        viewHolder.frequencyString.setDisplayedValues(frequencyValuesArray);
+    }
+
+    private TranslateAnimation bounceFromAbove() {
+        TranslateAnimation bounceAnim = new TranslateAnimation(0, 0, -1000, 0);
+        bounceAnim.setDuration(1000);
+        bounceAnim.setInterpolator(new BounceInterpolator());
+        bounceAnim.setRepeatCount(0);
+        bounceAnim.setFillAfter(false);
+        return bounceAnim;
+    }
+
+    private AnimationSet rollingLeftCall() {
+        AnimationSet rollingLeft = new AnimationSet(true);
+        rollingLeft.setFillEnabled(true);
+
+        TranslateAnimation movingLeft = new TranslateAnimation(940, 0, 0, 0);
+        movingLeft.setFillAfter(true);
+        movingLeft.setDuration(2000);
+        movingLeft.setRepeatCount(0);
+
+        RotateAnimation rolling = new RotateAnimation(359, 0, Animation.RELATIVE_TO_SELF, 0.5255f,
+                Animation.RELATIVE_TO_SELF, 0.5255f);
+        rolling.setDuration(400);
+        rolling.setInterpolator(new LinearInterpolator());
+        rolling.setFillAfter(false);
+        rolling.setRepeatCount(3);
+
+        rollingLeft.addAnimation(rolling);
+        rollingLeft.addAnimation(movingLeft);
+        return rollingLeft;
+    }
+
+    @Override
+    public int getItemCount() {
         return savings.size();
     }
 
@@ -148,19 +275,31 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         public TextView text;
         public ImageView nextIcon;
         public ImageView deleteIcon;
+        public RelativeLayout savingsView;
+        public ImageView backIcon;
+        public ImageView acceptIcon;
+        public View sliderView;
+        public NumberPicker amountSaved;
+        public NumberPicker frequency;
+        public NumberPicker frequencyString;
 
         public ViewHolder(View itemView) {
             super(itemView);
             image = (ImageView) itemView.findViewById(R.id.saving_icon);
             text = (TextView) itemView.findViewById(R.id.saving_title);
-            nextIcon = (ImageView)  itemView.findViewById(R.id.next_icon);
+            nextIcon = (ImageView) itemView.findViewById(R.id.next_icon);
             deleteIcon = (ImageView) itemView.findViewById(R.id.delete_icon);
-
+            savingsView = (RelativeLayout) itemView.findViewById(R.id.slider_second_page);
+            sliderView = itemView.findViewById(R.id.slider_second_page_backdrop);
+            backIcon = (ImageView) itemView.findViewById(R.id.back_icon);
+            acceptIcon = (ImageView) itemView.findViewById(R.id.accept_icon);
+            amountSaved = (NumberPicker) itemView.findViewById(R.id.money_amount);
+            frequency = (NumberPicker) itemView.findViewById(R.id.numeric_frequency);
+            frequencyString = (NumberPicker) itemView.findViewById(R.id.text_frequency);
         }
     }
 
-    public ArrayList<SavingsRecord> getSavingsList()
-    {
-    return savings;
+    public List<SavingsRecord> getSavingsList() {
+        return savings;
     }
 }
