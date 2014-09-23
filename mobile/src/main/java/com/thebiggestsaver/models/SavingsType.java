@@ -1,10 +1,6 @@
 package com.thebiggestsaver.models;
 
-import android.graphics.Bitmap;
-
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Parcelable;
 
 /**
  * Created by patriciaestridge on 7/21/14.
@@ -17,7 +13,7 @@ public class SavingsType {
     private Drawable accept;
     private Drawable next;
     private Drawable back;
-    private Drawable edit;
+   // private Drawable edit;
     private Drawable delete;
 
     public String getId() {
@@ -29,13 +25,13 @@ public class SavingsType {
     }
 
 
-    public Drawable getEdit() {
-        return edit;
-    }
-
-    public void setEdit(Drawable edit) {
-        this.edit = edit;
-    }
+//    public Drawable getEdit() {
+//        return edit;
+//    }
+//
+//    public void setEdit(Drawable edit) {
+//        this.edit = edit;
+//    }
 
     public Drawable getDelete() {
         return delete;

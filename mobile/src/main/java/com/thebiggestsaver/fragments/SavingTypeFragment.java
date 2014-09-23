@@ -1,11 +1,7 @@
 package com.thebiggestsaver.fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.thebiggestsaver.R;
-import com.thebiggestsaver.activities.SavingActivity;
 import com.thebiggestsaver.helpers.SavingsTypeHelper;
-import com.thebiggestsaver.models.SavingsRecord;
 import com.thebiggestsaver.models.SavingsType;
 
-import java.awt.font.TextAttribute;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,20 +39,6 @@ public class SavingTypeFragment extends Fragment {
 
         ImageView icon = (ImageView) rootView.findViewById(R.id.saving_icon);
         icon.setImageDrawable(savingsTypeList.get(position).getIcon());
-
-
-        addIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SavingsRecord savingRecord = new SavingsRecord();
-                savingRecord.setTitle(savingsTypeList.get(position).getTitle());
-                savingRecord.setSavingsTypeId(savingsTypeList.get(position).getId());
-                savingRecord.setSavingsType(savingsTypeList.get(position));
-                savingRecord.setId(savingsTypeList.get(position).getTitle());
-                ((SavingActivity)getActivity()).savingListAdapter.add(savingRecord, 0);
-                ((SavingActivity)getActivity()).recyclerView.scrollToPosition(0);
-            }
-        });
 
         return rootView;
     }

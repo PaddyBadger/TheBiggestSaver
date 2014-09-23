@@ -1,13 +1,9 @@
 package com.thebiggestsaver.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.support.v7.graphics.Palette;
-import android.support.v7.graphics.PaletteItem;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,14 +15,12 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.thebiggestsaver.R;
 import com.thebiggestsaver.models.SavingsRecord;
-import com.thebiggestsaver.models.SavingsType;
 
 import java.util.ArrayList;
 import java.util.Currency;
@@ -40,10 +34,6 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
     public List<SavingsRecord> savings = new ArrayList<SavingsRecord>();
     private Context context;
     private int itemLayout;
-    private Drawable nextIcon;
-    private Drawable deleteIcon;
-    private Drawable acceptIcon;
-    private Drawable backIcon;
 
     public SavingListAdapter(Context context, List<SavingsRecord> savings, int itemLayout) {
         super();
@@ -64,10 +54,10 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         viewHolder.text.setText(item.getTitle());
         Drawable icon = item.getSavingsType().getIcon();
         viewHolder.image.setImageDrawable(icon);
-        nextIcon = item.getSavingsType().getNext();
-        deleteIcon = item.getSavingsType().getDelete();
-        backIcon = item.getSavingsType().getBack();
-        acceptIcon = item.getSavingsType().getAccept();
+        Drawable nextIcon = item.getSavingsType().getNext();
+        final Drawable deleteIcon = item.getSavingsType().getDelete();
+        Drawable backIcon = item.getSavingsType().getBack();
+        Drawable acceptIcon = item.getSavingsType().getAccept();
 
         String colorIdString = item.getSavingsType().getId();
         int colorInt = context.getResources().getIdentifier(colorIdString, "color", context.getPackageName());
@@ -112,7 +102,7 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         } else {
             viewHolder.nextIcon.setImageDrawable(nextIcon);
         }
-        nextOnClick(viewHolder, backIcon, acceptIcon);
+        nextOnClick(viewHolder);
 
         viewHolder.deleteIcon.setImageDrawable(null);
         if (i == 0) {
@@ -165,14 +155,14 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
                         viewHolder.backIcon.setVisibility(View.GONE);
 
 
-                        nextOnClick(viewHolder, backIcon, acceptIcon);
+                        nextOnClick(viewHolder);
                     }
                 }, 1000);
             }
         });
     }
 
-    private void nextOnClick(final ViewHolder viewHolder, final Drawable backIcon, final Drawable acceptIcon) {
+    private void nextOnClick(final ViewHolder viewHolder) {
         viewHolder.nextIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -268,6 +258,12 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         int position = savings.indexOf(item);
         savings.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void dataSetChanged(List<SavingsRecord> list)
+    {
+        this.savings = list;
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

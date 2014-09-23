@@ -2,22 +2,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <RelativeLayout android:layout_width="match_parent"
         android:layout_height="174dp">
-
-        <View
-            android:layout_width="match_parent"
+        <View android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginLeft="@dimen/activity_vertical_margin"
             android:layout_marginRight="@dimen/activity_vertical_margin"
             android:background="@color/white"
             android:elevation="5dp" />
-
-        <com.thebiggestsaver.utils.typeface.TypefaceTextView
-            android:id="@+id/saving_title"
+        <com.thebiggestsaver.utils.typeface.TypefaceTextView android:id="@+id/saving_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -27,140 +21,26 @@
             android:elevation="7dp"
             android:textColor="@color/grey_text"
             android:textSize="16sp" />
-
-        <ImageView
-            android:id="@+id/saving_icon"
+        <ImageView android:id="@+id/saving_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_margin="42dp"
             android:elevation="7dp"
             android:src="@drawable/yellow_coffee" />
-
-        <ImageView
-            android:id="@+id/next_icon"
+        <ImageView android:id="@+id/next_icon"
             android:layout_width="46dp"
             android:layout_height="46dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:elevation="20dp"
-            android:paddingRight="4dp"
-
-            />
-
-        <ImageView
-            android:id="@+id/delete_icon"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:elevation="20dp"
-            android:paddingLeft="4dp"
-
-            />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/slider_second_page"
-        android:layout_width="match_parent"
-        android:layout_height="174dp">
-
-
-        <View
-            android:id="@+id/slider_second_page_backdrop"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginLeft="@dimen/activity_vertical_margin"
-            android:layout_marginRight="@dimen/activity_vertical_margin"
-            android:background="@color/white_opacity"
-            />
-
-            <com.thebiggestsaver.utils.typeface.TypefaceTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginTop="8dp"
-                android:elevation="7dp"
-                android:text="Potential Savings"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:layout_marginLeft="@dimen/activity_vertical_margin">
-
-                <NumberPicker
-                android:id="@+id/money_amount"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="8dp"
-                android:background="@android:color/transparent"/>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="5dp"
-
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/white" />
-
-                <NumberPicker
-                android:id="@+id/numeric_frequency"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="8dp"/>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="5dp"
-                    android:background="@color/white"
-                    />
-
-                <NumberPicker
-                    android:id="@+id/text_frequency"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginRight="@dimen/activity_vertical_margin"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:layout_weight="2" />
-
-
-            </LinearLayout>
-
-        <ImageView
-            android:id="@+id/accept_icon"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:elevation="20dp"
-            android:paddingRight="4dp"
-
-            />
-
-        <ImageView
-            android:id="@+id/back_icon"
+            android:paddingRight="4dp" />
+        <ImageView android:id="@+id/delete_icon"
             android:layout_width="46dp"
             android:layout_height="46dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:elevation="20dp"
             android:paddingLeft="4dp" />
-
     </RelativeLayout>
-
 </FrameLayout>

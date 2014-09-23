@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,65 +55,54 @@ public class SavingActivity extends FragmentActivity {
         ButterKnife.inject(this);
         context = this;
 
-        getSupportLoaderManager().initLoader(getClass().getName().hashCode(), null, new android.support.v4.app.LoaderManager.LoaderCallbacks<List<SavingsRecord>>()
-        {
-            @Override
-            public Loader<List<SavingsRecord>> onCreateLoader(int i,Bundle bundle){
-                List<SavingsRecord> storedSavingsRecords = new ArrayList<SavingsRecord>();
-                try {
-                    Dao<SavingsRecord, ?> dao = DatabaseHelper.getInstance(context).getDao(SavingsRecord.class);
-                    storedSavingsRecords = dao.queryForAll();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            public void onLoadFinished(Loader<List<SavingsRecord>> listLoader, List<SavingsRecord> savingsRecordsList)
-            {
-                SavingsTypeHelper savingsTypeHelper = new SavingsTypeHelper();
-                List<SavingsType> savingsTypeToAppend = savingsTypeHelper.savingsTypeHelperBuildList(context);
-
-                for (SavingsRecord storedSavingsRecord : savingsRecordsList)
-                {
-                    for (SavingsType savingsType : savingsTypeToAppend)
-                    {
-                        if (storedSavingsRecord.getId().equals(savingsType.getId()))
-                        {
-                            storedSavingsRecord.setSavingsType(savingsType);
-                        }
-                    }
-                }
-
-                savingsRecords = savingsRecordsList;
-            }
-
-            @Override
-            public void onLoaderReset(Loader<List<SavingsRecord>> listLoader)
-            {
-            }
-        });
-
         recyclerView = (RecyclerView) findViewById(R.id.signup_list);
         savings = new ArrayList<SavingsType>();
-
-        new BackBar(this, "Where Can You Save?");
-
         savingListAdapter = new SavingListAdapter(this, savingsRecords, R.layout.savings_recycler_view);
         recyclerView.setAdapter(savingListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
 
+        new BackBar(this, "Where Can You Save?");
+
         setTopPager();
+
     }
 
     public void setTopPager() {
-        SavingPagerAdapter savingPagerAdapter = new SavingPagerAdapter(getSupportFragmentManager());
-        savingViewPager = (ViewPager) findViewById(R.id.savings_pager);
-        savingViewPager.setAdapter(savingPagerAdapter);
+            SavingPagerAdapter savingPagerAdapter = new SavingPagerAdapter(getSupportFragmentManager());
+            savingViewPager = (ViewPager) findViewById(R.id.savings_pager);
+            savingViewPager.setAdapter(savingPagerAdapter);
+
+            checkForExistingRecords();
     }
+
+    private void checkForExistingRecords()
+    {
+        try {
+            Dao<SavingsRecord, ?> dao = DatabaseHelper.getInstance(context).getDao(SavingsRecord.class);
+            savingsRecords = dao.queryForAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        SavingsTypeHelper savingsTypeHelper = new SavingsTypeHelper();
+        List<SavingsType> savingsTypeToAppend = savingsTypeHelper.savingsTypeHelperBuildList(context);
+
+        for (SavingsRecord storedSavingsRecord : savingsRecords)
+        {
+            for (SavingsType savingsType : savingsTypeToAppend)
+            {
+                if (storedSavingsRecord.getSavingsTypeId().equals(savingsType.getId()))
+                {
+                    storedSavingsRecord.setSavingsType(savingsType);
+                }
+            }
+        }
+
+        savingListAdapter.dataSetChanged(savingsRecords);
+    }
+
 
     public class SavingPagerAdapter extends FragmentStatePagerAdapter {
         public SavingPagerAdapter(FragmentManager fm) {

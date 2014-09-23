@@ -8,6 +8,4 @@
     <style name="MyActionBar" parent="@android:style/Widget.Material.ActionBar">
         <item name="android:background">@color/theme_blue</item>
     </style>
-
-
 </resources>

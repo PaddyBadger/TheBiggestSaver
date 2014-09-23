@@ -1,15 +1,10 @@
 package com.thebiggestsaver.helpers;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 
 import com.thebiggestsaver.R;
 import com.thebiggestsaver.models.SavingsType;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,9 +52,9 @@ public class SavingsTypeHelper
             int drawableDeleteId = context.getResources().getIdentifier(deleteDrawable, "drawable", context.getPackageName());
             savingType.setDelete(context.getResources().getDrawable(drawableDeleteId));
 
-            String editDrawable = savingsTypeArrayShortTitles[position]+"edit";
-            int drawableEditId = context.getResources().getIdentifier(editDrawable, "drawable", context.getPackageName());
-            savingType.setEdit(context.getResources().getDrawable(drawableEditId));
+//            String editDrawable = savingsTypeArrayShortTitles[position]+"edit";
+//            int drawableEditId = context.getResources().getIdentifier(editDrawable, "drawable", context.getPackageName());
+//            savingType.setEdit(context.getResources().getDrawable(drawableEditId));
 
 
             savingsTypeList.add(savingType);

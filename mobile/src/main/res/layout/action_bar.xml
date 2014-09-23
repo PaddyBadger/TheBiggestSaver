@@ -12,4 +12,5 @@
     android:layout_marginLeft="@dimen/activity_vertical_margin"
     android:layout_marginRight="@dimen/activity_vertical_margin"
     android:maxLines="1"
-    android:elevation="5dp"/>
+    android:elevation="5dp"
+    android:gravity="center"/>
