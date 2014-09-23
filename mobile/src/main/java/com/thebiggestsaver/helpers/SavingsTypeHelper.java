@@ -36,39 +36,34 @@ public class SavingsTypeHelper
 
             int iconId = context.getResources().getIdentifier(iconString, "drawable", context.getPackageName());
             savingType.setIcon(context.getResources().getDrawable(iconId));
-
-            String addDrawable = savingsTypeArrayShortTitles[position]+"add";
-            int drawableId = context.getResources().getIdentifier(addDrawable, "drawable", context.getPackageName());
-            savingType.setAdd(context.getResources().getDrawable(drawableId));
-
-            String nextDrawable = savingsTypeArrayShortTitles[position]+"next";
-            int drawableNextId = context.getResources().getIdentifier(nextDrawable, "drawable", context.getPackageName());
-            savingType.setNext(context.getResources().getDrawable(drawableNextId));
-
-            String backDrawable = savingsTypeArrayShortTitles[position]+"back";
-            int drawableBackId = context.getResources().getIdentifier(backDrawable, "drawable", context.getPackageName());
-            savingType.setBack(context.getResources().getDrawable(drawableBackId));
-
-            String acceptDrawable = savingsTypeArrayShortTitles[position]+"accept";
-            int drawableAcceptId = context.getResources().getIdentifier(acceptDrawable, "drawable", context.getPackageName());
-            savingType.setAccept(context.getResources().getDrawable(drawableAcceptId));
-
-            String deleteDrawable = savingsTypeArrayShortTitles[position]+"delete";
-            int drawableDeleteId = context.getResources().getIdentifier(deleteDrawable, "drawable", context.getPackageName());
-            savingType.setDelete(context.getResources().getDrawable(drawableDeleteId));
-
-            String editDrawable = savingsTypeArrayShortTitles[position]+"edit";
-            int drawableEditId = context.getResources().getIdentifier(editDrawable, "drawable", context.getPackageName());
-            savingType.setEdit(context.getResources().getDrawable(drawableEditId));
+//
+//            String addDrawable = savingsTypeArrayShortTitles[position]+"add";
+//            int drawableId = context.getResources().getIdentifier(addDrawable, "drawable", context.getPackageName());
+//            savingType.setAdd(context.getResources().getDrawable(drawableId));
+//
+//            String nextDrawable = savingsTypeArrayShortTitles[position]+"next";
+//            int drawableNextId = context.getResources().getIdentifier(nextDrawable, "drawable", context.getPackageName());
+//            savingType.setNext(context.getResources().getDrawable(drawableNextId));
+//
+//            String backDrawable = savingsTypeArrayShortTitles[position]+"back";
+//            int drawableBackId = context.getResources().getIdentifier(backDrawable, "drawable", context.getPackageName());
+//            savingType.setBack(context.getResources().getDrawable(drawableBackId));
+//
+//            String acceptDrawable = savingsTypeArrayShortTitles[position]+"accept_circle";
+//            int drawableAcceptId = context.getResources().getIdentifier(acceptDrawable, "drawable", context.getPackageName());
+//            savingType.setAccept(context.getResources().getDrawable(drawableAcceptId));
+//
+//            String deleteDrawable = savingsTypeArrayShortTitles[position]+"delete_circle";
+//            int drawableDeleteId = context.getResources().getIdentifier(deleteDrawable, "drawable", context.getPackageName());
+//            savingType.setDelete(context.getResources().getDrawable(drawableDeleteId));
+//
+//            String editDrawable = savingsTypeArrayShortTitles[position]+"edit";
+//            int drawableEditId = context.getResources().getIdentifier(editDrawable, "drawable", context.getPackageName());
+//            savingType.setEdit(context.getResources().getDrawable(drawableEditId));
 
 
             savingsTypeList.add(savingType);
         }
-        return savingsTypeList;
-    }
-
-    public List<SavingsType> getSavingsTypeList()
-    {
         return savingsTypeList;
     }
 }
