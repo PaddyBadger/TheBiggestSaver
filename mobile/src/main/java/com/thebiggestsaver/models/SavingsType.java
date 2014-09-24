@@ -8,13 +8,78 @@ import android.graphics.drawable.Drawable;
 public class SavingsType {
     private String id;
     private String title;
-    private Drawable icon;
-    private Drawable add;
-    private Drawable accept;
-    private Drawable next;
-    private Drawable back;
-   // private Drawable edit;
-    private Drawable delete;
+    private String iconUrl;
+    private String color;
+    private String delete;
+    private String accept;
+    private String next;
+    private String back;
+    private String add;
+    private String edit;
+
+    public String getEdit() {
+        return edit;
+    }
+
+    public void setEdit(String edit) {
+        this.edit = edit;
+    }
+
+    public String getDelete() {
+        return delete;
+    }
+
+    public void setDelete(String delete) {
+        this.delete = delete;
+    }
+
+    public String getAccept() {
+        return accept;
+    }
+
+    public void setAccept(String accept) {
+        this.accept = accept;
+    }
+
+    public String getNext() {
+        return next;
+    }
+
+    public void setNext(String next) {
+        this.next = next;
+    }
+
+    public String getBack() {
+        return back;
+    }
+
+    public void setBack(String back) {
+        this.back = back;
+    }
+
+    public String getAdd() {
+        return add;
+    }
+
+    public void setAdd(String add) {
+        this.add = add;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     public String getId() {
         return id;
@@ -22,47 +87,6 @@ public class SavingsType {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-
-//    public Drawable getEdit() {
-//        return edit;
-//    }
-//
-//    public void setEdit(Drawable edit) {
-//        this.edit = edit;
-//    }
-
-    public Drawable getDelete() {
-        return delete;
-    }
-
-    public void setDelete(Drawable delete) {
-        this.delete = delete;
-    }
-
-    public Drawable getAccept() {
-        return accept;
-    }
-
-    public void setAccept(Drawable accept) {
-        this.accept = accept;
-    }
-
-    public Drawable getNext() {
-        return next;
-    }
-
-    public void setNext(Drawable next) {
-        this.next = next;
-    }
-
-    public Drawable getBack() {
-        return back;
-    }
-
-    public void setBack(Drawable back) {
-        this.back = back;
     }
 
     public void setTitle(String title)
@@ -74,26 +98,4 @@ public class SavingsType {
     {
         return title;
     }
-
-    public void setIcon(Drawable icon)
-    {
-        this.icon = icon;
-    }
-
-    public Drawable getIcon()
-    {
-        return icon;
-    }
-
-    public void setAdd(Drawable add)
-    {
-        this.add = add;
-    }
-
-    public Drawable getAdd()
-    {
-        return add;
-    }
-
-
 }

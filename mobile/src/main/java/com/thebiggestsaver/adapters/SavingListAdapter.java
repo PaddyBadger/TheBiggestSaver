@@ -18,10 +18,8 @@ import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.thebiggestsaver.R;
 import com.thebiggestsaver.models.SavingsRecord;
-
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
@@ -52,82 +50,82 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
     public void onBindViewHolder(final ViewHolder viewHolder, int i) {
         final SavingsRecord item = savings.get(i);
         viewHolder.text.setText(item.getTitle());
-        Drawable icon = item.getSavingsType().getIcon();
-        viewHolder.image.setImageDrawable(icon);
-        Drawable nextIcon = item.getSavingsType().getNext();
-        final Drawable deleteIcon = item.getSavingsType().getDelete();
-        Drawable backIcon = item.getSavingsType().getBack();
-        Drawable acceptIcon = item.getSavingsType().getAccept();
-
-        String colorIdString = item.getSavingsType().getId();
-        int colorInt = context.getResources().getIdentifier(colorIdString, "color", context.getPackageName());
-        String colorString = context.getResources().getString(colorInt);
-        String[] colorStringArray = colorString.split("");
-
-        StringBuilder fiftyOpacity = new StringBuilder();
-
-        for (int j = 0; j < colorStringArray.length; j++)
-        {
-            if (j == 2)
-            {
-                colorStringArray[j] = "B";
-            }
-
-            if (j == 3)
-            {
-                colorStringArray[j] = "3";
-            }
-
-            if (j > 0)
-            {
-                fiftyOpacity.append(colorStringArray[j]);
-            }
-        }
-
-        colorString = fiftyOpacity.toString();
-
-        viewHolder.sliderView.setBackgroundColor(Color.parseColor(colorString));
-        viewHolder.acceptIcon.setImageDrawable(null);
-        viewHolder.backIcon.setImageDrawable(null);
-        viewHolder.backIcon.setImageDrawable(backIcon);
-        viewHolder.acceptIcon.setImageDrawable(acceptIcon);
-
-        setNumberPickers(viewHolder);
-
-        viewHolder.nextIcon.setImageDrawable(null);
-        if (i == 0) {
-            viewHolder.nextIcon.setImageDrawable(nextIcon);
-            TranslateAnimation anim = bounceFromAbove();
-            viewHolder.nextIcon.startAnimation(anim);
-        } else {
-            viewHolder.nextIcon.setImageDrawable(nextIcon);
-        }
-        nextOnClick(viewHolder);
-
-        viewHolder.deleteIcon.setImageDrawable(null);
-        if (i == 0) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    viewHolder.deleteIcon.setImageDrawable(deleteIcon);
-                    AnimationSet rollingLeft = rollingLeftCall();
-                    viewHolder.deleteIcon.startAnimation(rollingLeft);
-
-                }
-            }, 1000);
-        } else {
-            viewHolder.deleteIcon.setImageDrawable(deleteIcon);
-        }
-
-        viewHolder.deleteIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                remove(item);
-            }
-        });
-
-        backOnClick(viewHolder);
+//        Drawable icon = item.getSavingsType().getIcon();
+//        viewHolder.image.setImageDrawable(icon);
+//        Drawable nextIcon = item.getSavingsType().getNext();
+//        final Drawable deleteIcon = item.getSavingsType().getDelete();
+//        Drawable backIcon = item.getSavingsType().getBack();
+//        Drawable acceptIcon = item.getSavingsType().getAccept();
+//
+//        String colorIdString = item.getSavingsType().getId();
+//        int colorInt = context.getResources().getIdentifier(colorIdString, "color", context.getPackageName());
+//        String colorString = context.getResources().getString(colorInt);
+//        String[] colorStringArray = colorString.split("");
+//
+//        StringBuilder fiftyOpacity = new StringBuilder();
+//
+//        for (int j = 0; j < colorStringArray.length; j++)
+//        {
+//            if (j == 2)
+//            {
+//                colorStringArray[j] = "B";
+//            }
+//
+//            if (j == 3)
+//            {
+//                colorStringArray[j] = "3";
+//            }
+//
+//            if (j > 0)
+//            {
+//                fiftyOpacity.append(colorStringArray[j]);
+//            }
+//        }
+//
+//        colorString = fiftyOpacity.toString();
+//
+//        viewHolder.sliderView.setBackgroundColor(Color.parseColor(colorString));
+//        viewHolder.acceptIcon.setImageDrawable(null);
+//        viewHolder.backIcon.setImageDrawable(null);
+//        viewHolder.backIcon.setImageDrawable(backIcon);
+//        viewHolder.acceptIcon.setImageDrawable(acceptIcon);
+//
+//        setNumberPickers(viewHolder);
+//
+//        viewHolder.nextIcon.setImageDrawable(null);
+//        if (i == 0) {
+//            viewHolder.nextIcon.setImageDrawable(nextIcon);
+//            TranslateAnimation anim = bounceFromAbove();
+//            viewHolder.nextIcon.startAnimation(anim);
+//        } else {
+//            viewHolder.nextIcon.setImageDrawable(nextIcon);
+//        }
+//        nextOnClick(viewHolder);
+//
+//        viewHolder.deleteIcon.setImageDrawable(null);
+//        if (i == 0) {
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    viewHolder.deleteIcon.setImageDrawable(deleteIcon);
+//                    AnimationSet rollingLeft = rollingLeftCall();
+//                    viewHolder.deleteIcon.startAnimation(rollingLeft);
+//
+//                }
+//            }, 1000);
+//        } else {
+//            viewHolder.deleteIcon.setImageDrawable(deleteIcon);
+//        }
+//
+//        viewHolder.deleteIcon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                remove(item);
+//            }
+//        });
+//
+//        backOnClick(viewHolder);
 
     }
 

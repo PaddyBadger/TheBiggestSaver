@@ -34,11 +34,6 @@ public class SavingTypeFragment extends Fragment {
         final TextView title = (TextView) rootView.findViewById(R.id.saving_title);
         title.setText(savingsTypeList.get(position).getTitle());
 
-        ImageView addIcon = (ImageView) rootView.findViewById(R.id.addIcon);
-        addIcon.setImageDrawable(savingsTypeList.get(position).getAdd());
-
-        ImageView icon = (ImageView) rootView.findViewById(R.id.saving_icon);
-        icon.setImageDrawable(savingsTypeList.get(position).getIcon());
 
         return rootView;
     }

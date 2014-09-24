@@ -11,9 +11,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.gson.Gson;
 import com.j256.ormlite.dao.Dao;
 import com.thebiggestsaver.R;
 import com.thebiggestsaver.actionbars.BackBar;
@@ -55,6 +57,13 @@ public class SavingActivity extends FragmentActivity {
         ButterKnife.inject(this);
         context = this;
 
+        createRecyclerView();
+        createTopPager();
+
+        new BackBar(this, "Where Can You Save?");
+    }
+
+    private void createRecyclerView() {
         recyclerView = (RecyclerView) findViewById(R.id.signup_list);
         savings = new ArrayList<SavingsType>();
         savingListAdapter = new SavingListAdapter(this, savingsRecords, R.layout.savings_recycler_view);
@@ -62,18 +71,12 @@ public class SavingActivity extends FragmentActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
-
-        new BackBar(this, "Where Can You Save?");
-
-        setTopPager();
-
     }
 
-    public void setTopPager() {
+    public void createTopPager() {
             SavingPagerAdapter savingPagerAdapter = new SavingPagerAdapter(getSupportFragmentManager());
             savingViewPager = (ViewPager) findViewById(R.id.savings_pager);
             savingViewPager.setAdapter(savingPagerAdapter);
-
             checkForExistingRecords();
     }
 
@@ -88,6 +91,15 @@ public class SavingActivity extends FragmentActivity {
 
         SavingsTypeHelper savingsTypeHelper = new SavingsTypeHelper();
         List<SavingsType> savingsTypeToAppend = savingsTypeHelper.savingsTypeHelperBuildList(context);
+
+//        List<String> savingsGson = new ArrayList<String>();
+//        for (SavingsType savingsType : savingsTypeToAppend) {
+//            String typeGson = new Gson().toJson(savingsType);
+//            savingsGson.add(typeGson);
+//        }
+//
+//        savingsGson.toString();
+//        Log.e("list", savingsGson.toString());
 
         for (SavingsRecord storedSavingsRecord : savingsRecords)
         {
