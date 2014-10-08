@@ -1,5 +1,7 @@
 package com.thebiggestsaver.fragments;
 
+import android.graphics.Color;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,10 +10,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.thebiggestsaver.R;
+import com.thebiggestsaver.activities.SavingActivity;
 import com.thebiggestsaver.helpers.SavingsTypeHelper;
+import com.thebiggestsaver.models.SavingsRecord;
 import com.thebiggestsaver.models.SavingsType;
+import com.thebiggestsaver.utils.DimeUi;
+import com.thebiggestsaver.utils.MyVolley;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,11 +42,33 @@ public class SavingTypeFragment extends Fragment {
         final TextView title = (TextView) rootView.findViewById(R.id.saving_title);
         title.setText(savingsTypeList.get(position).getTitle());
 
-        ImageView addIcon = (ImageView) rootView.findViewById(R.id.addIcon);
-        addIcon.setImageDrawable(savingsTypeList.get(position).getAdd());
+        List<Integer> addIcon = new ArrayList<Integer>();
+        addIcon.add(R.drawable.add);
 
-        ImageView icon = (ImageView) rootView.findViewById(R.id.saving_icon);
-        icon.setImageDrawable(savingsTypeList.get(position).getIcon());
+        String colorString = savingsTypeList.get(position).getColor();
+        int colorForIcons = Color.parseColor(colorString);
+
+        List<StateListDrawable> stateListDrawables = DimeUi.buildDrawableStateList(getActivity(), addIcon, colorForIcons);
+
+        ImageView addIconView = (ImageView) rootView.findViewById(R.id.addIcon);
+        addIconView.setImageDrawable(stateListDrawables.get(0));
+
+        NetworkImageView icon = (NetworkImageView) rootView.findViewById(R.id.saving_icon);
+        icon.setImageUrl(savingsTypeList.get(position).getIconUrl(), MyVolley.getImageLoader());
+
+        addIconView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SavingsRecord savingRecord = new SavingsRecord();
+                savingRecord.setTitle(savingsTypeList.get(position).getTitle());
+                savingRecord.setSavingsTypeId(savingsTypeList.get(position).getId());
+                savingRecord.setSavingsType(savingsTypeList.get(position));
+                savingRecord.setId(savingsTypeList.get(position).getTitle());
+                ((SavingActivity)getActivity()).savingListAdapter.add(savingRecord, 0);
+                ((SavingActivity)getActivity()).recyclerView.scrollToPosition(0);
+            }
+        });
+
 
         return rootView;
     }

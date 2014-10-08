@@ -16,19 +16,17 @@
         android:layout_margin="24dp"
         android:textSize="16sp"
         android:elevation="7dp" />
-    <ImageView
+    <com.android.volley.toolbox.NetworkImageView
         android:layout_margin="50dp"
         android:id="@+id/saving_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@drawable/yellow_coffee"
         android:elevation="7dp" />
     <ImageView
         android:id="@+id/addIcon"
         android:layout_width="46dp"
         android:layout_height="46dp"
-        android:src="@drawable/lesscoffeeadd"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:paddingRight="4dp"

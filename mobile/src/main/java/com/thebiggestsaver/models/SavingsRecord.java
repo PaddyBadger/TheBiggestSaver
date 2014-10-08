@@ -1,7 +1,5 @@
 package com.thebiggestsaver.models;
 
-import android.content.ContentValues;
-
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -15,32 +13,64 @@ import java.util.Map;
  */
 @DatabaseTable
 public class SavingsRecord {
-
     private SavingsType savingsType;
-
-    @DatabaseField
-    private String savingsTypeId;
-    @DatabaseField(id = true)
-    private String id;
     private Map<Date, Integer> todaysSavings;
-    @DatabaseField
-    private float amountSavedEachTime;
-    @DatabaseField
-    private String dailyWeelklyMonthly;
-    @DatabaseField
-    private Integer expectedFrequency;
     @DatabaseField
     private String title;
     @DatabaseField
     private String jsonOfTodaysSavings;
+    @DatabaseField
+    private String amount;
+    @DatabaseField
+    private String frequency;
+    @DatabaseField(id = true)
+    private String id;
+    @DatabaseField
+    private String savingsTypeId;
+    @DatabaseField
+    private Integer multiplier;
 
-    public String getJsonOfTodaysSavings() {
-        return jsonOfTodaysSavings;
+
+    public String getAmount() {
+        return amount;
     }
 
-    public void setJsonOfTodaysSavings(String jsonOfTodaysSavings) {
-        jsonOfTodaysSavings = new JSONObject(todaysSavings).toString();
-        this.jsonOfTodaysSavings = jsonOfTodaysSavings;
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public String getSavingsTypeId() {
+        return savingsTypeId;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setSavingsTypeId(String savingsTypeId) {
+        this.savingsTypeId = savingsTypeId;
+    }
+
+
+    public String getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(String frequency) {
+        this.frequency = frequency;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public SavingsType getSavingsType() {
@@ -51,71 +81,32 @@ public class SavingsRecord {
         this.savingsType = savingsType;
     }
 
-    public String getSavingsTypeId() {
-        return savingsTypeId;
+    public Integer getMultiplier() {
+        return multiplier;
     }
 
-    public void setSavingsTypeId(String savingsTypeString) {
-        this.savingsTypeId = savingsTypeString;
+    public void setMultiplier(Integer multiplier) {
+        this.multiplier = multiplier;
     }
 
-
-    public String getId() {
-        return id;
+    public String getJsonOfTodaysSavings() {
+        return jsonOfTodaysSavings;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setJsonOfTodaysSavings(String jsonOfTodaysSavings) {
+        jsonOfTodaysSavings = new JSONObject(todaysSavings).toString();
+        this.jsonOfTodaysSavings = jsonOfTodaysSavings;
     }
 
-    public Map<Date, Integer> getTodaysSavings() {
-        return todaysSavings;
-    }
-
-    public void setTodaysSavings(Map<Date, Integer> todaysSavings) {
-        this.todaysSavings = todaysSavings;
-    }
-
-    public float getAmountSavedEachTime() {
-        return amountSavedEachTime;
-    }
-
-    public void setAmountSavedEachTime(float amountSavedEachTime) {
-        this.amountSavedEachTime = amountSavedEachTime;
-    }
-
-    public String getDailyWeelklyMonthly() {
-        return dailyWeelklyMonthly;
-    }
-
-    public void setDailyWeelklyMonthly(String dailyWeelklyMonthly) {
-        this.dailyWeelklyMonthly = dailyWeelklyMonthly;
-    }
-
-    public Integer getExpectedFrequency() {
-        return expectedFrequency;
-    }
-
-    public void setExpectedFrequency(Integer expectedFrequency) {
-        this.expectedFrequency = expectedFrequency;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public SavingsRecord makeDatabaseSavingsRecord(){
         SavingsRecord databaseSavingsRecord = new SavingsRecord();
         databaseSavingsRecord.id = id;
         databaseSavingsRecord.savingsTypeId = savingsTypeId;
         databaseSavingsRecord.jsonOfTodaysSavings = jsonOfTodaysSavings;
-        databaseSavingsRecord.amountSavedEachTime = amountSavedEachTime;
-        databaseSavingsRecord.expectedFrequency = expectedFrequency;
-        databaseSavingsRecord.dailyWeelklyMonthly = dailyWeelklyMonthly;
+        databaseSavingsRecord.amount = amount;
+        databaseSavingsRecord.multiplier = multiplier;
+        databaseSavingsRecord.frequency = frequency;
         databaseSavingsRecord.title = title;
 
         return databaseSavingsRecord;

@@ -1,20 +1,39 @@
 package com.thebiggestsaver.models;
 
-import android.graphics.drawable.Drawable;
-
 /**
  * Created by patriciaestridge on 7/21/14.
  */
 public class SavingsType {
+
+    private String color;
+    private String delete;
+    private String iconUrl;
     private String id;
     private String title;
-    private Drawable icon;
-    private Drawable add;
-    private Drawable accept;
-    private Drawable next;
-    private Drawable back;
-   // private Drawable edit;
-    private Drawable delete;
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getDelete() {
+        return delete;
+    }
+
+    public void setDelete(String delete) {
+        this.delete = delete;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
 
     public String getId() {
         return id;
@@ -25,75 +44,11 @@ public class SavingsType {
     }
 
 
-//    public Drawable getEdit() {
-//        return edit;
-//    }
-//
-//    public void setEdit(Drawable edit) {
-//        this.edit = edit;
-//    }
-
-    public Drawable getDelete() {
-        return delete;
-    }
-
-    public void setDelete(Drawable delete) {
-        this.delete = delete;
-    }
-
-    public Drawable getAccept() {
-        return accept;
-    }
-
-    public void setAccept(Drawable accept) {
-        this.accept = accept;
-    }
-
-    public Drawable getNext() {
-        return next;
-    }
-
-    public void setNext(Drawable next) {
-        this.next = next;
-    }
-
-    public Drawable getBack() {
-        return back;
-    }
-
-    public void setBack(Drawable back) {
-        this.back = back;
-    }
-
-    public void setTitle(String title)
-    {
-        this.title = title;
-    }
-
-    public String getTitle()
-    {
+    public String getTitle() {
         return title;
     }
 
-    public void setIcon(Drawable icon)
-    {
-        this.icon = icon;
+    public void setTitle(String title) {
+        this.title = title;
     }
-
-    public Drawable getIcon()
-    {
-        return icon;
-    }
-
-    public void setAdd(Drawable add)
-    {
-        this.add = add;
-    }
-
-    public Drawable getAdd()
-    {
-        return add;
-    }
-
-
 }

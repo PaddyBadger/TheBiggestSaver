@@ -93,7 +93,7 @@ public class SavingActivity extends FragmentActivity {
         {
             for (SavingsType savingsType : savingsTypeToAppend)
             {
-                if (storedSavingsRecord.getSavingsTypeId().equals(savingsType.getId()))
+                if (storedSavingsRecord.getSavingsType().equals(savingsType.getId()))
                 {
                     storedSavingsRecord.setSavingsType(savingsType);
                 }
