@@ -11,11 +11,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.gson.Gson;
 import com.j256.ormlite.dao.Dao;
 import com.thebiggestsaver.R;
 import com.thebiggestsaver.actionbars.BackBar;
@@ -92,20 +90,12 @@ public class SavingActivity extends FragmentActivity {
         SavingsTypeHelper savingsTypeHelper = new SavingsTypeHelper();
         List<SavingsType> savingsTypeToAppend = savingsTypeHelper.savingsTypeHelperBuildList(context);
 
-//        List<String> savingsGson = new ArrayList<String>();
-//        for (SavingsType savingsType : savingsTypeToAppend) {
-//            String typeGson = new Gson().toJson(savingsType);
-//            savingsGson.add(typeGson);
-//        }
-//
-//        savingsGson.toString();
-//        Log.e("list", savingsGson.toString());
-
         for (SavingsRecord storedSavingsRecord : savingsRecords)
         {
             for (SavingsType savingsType : savingsTypeToAppend)
             {
-                if (storedSavingsRecord.getSavingsType().equals(savingsType.getId()))
+
+                if (storedSavingsRecord.getSavingsTypeId().equals(savingsType.getId()))
                 {
                     storedSavingsRecord.setSavingsType(savingsType);
                 }
@@ -137,16 +127,12 @@ public class SavingActivity extends FragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.saving, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
 

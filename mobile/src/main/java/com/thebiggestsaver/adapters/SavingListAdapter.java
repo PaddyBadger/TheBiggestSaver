@@ -56,9 +56,9 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder viewHolder, int i)
+    public void onBindViewHolder(final ViewHolder viewHolder, int position)
     {
-        final SavingsRecord item = savings.get(i);
+        final SavingsRecord item = savings.get(position);
 
         resetInitialView(viewHolder);
 
@@ -80,10 +80,10 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         viewHolder.backIcon.setImageDrawable(iconsForSavingsRecord.get(0));
         viewHolder.acceptIcon.setImageDrawable(iconsForSavingsRecord.get(3));
 
-        createNextIconView(viewHolder, i, item);
-        createDeleteIconView(viewHolder, i, item);
+        createNextIconView(viewHolder, position, item);
+        createDeleteIconView(viewHolder, position, item);
         createColorBackground(viewHolder, item);
-        createNumberPickers(viewHolder, item);
+        createNumberPickers(viewHolder, item, position);
         backOnClick(viewHolder);
         createAcceptIconChange(viewHolder, item);
     }
@@ -244,10 +244,10 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         });
     }
 
-    private void createNumberPickers(ViewHolder viewHolder, final SavingsRecord item)
+    private void createNumberPickers(ViewHolder viewHolder, final SavingsRecord item, int position)
     {
         createMultiplierPicker(viewHolder, item);
-        createAmountPicker(viewHolder, item);
+        createAmountPicker(viewHolder, item, position);
         createFrequencyString(viewHolder, item);
     }
 
@@ -268,7 +268,7 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         });
     }
 
-    private void createAmountPicker(ViewHolder viewHolder, final SavingsRecord item)
+    private void createAmountPicker(ViewHolder viewHolder, final SavingsRecord item, final int position)
     {
         Locale locale = context.getResources().getConfiguration().locale;
         Currency localCurrency = Currency.getInstance(locale);
@@ -290,6 +290,7 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
             {
                 String savingsAmount = savingsAmounts[numberPicker.getValue()];
                 item.setAmount(savingsAmount);
+
             }
         });
     }
@@ -397,6 +398,7 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
 
     public List<SavingsRecord> getSavingsList()
     {
+
         return savings;
     }
 }
