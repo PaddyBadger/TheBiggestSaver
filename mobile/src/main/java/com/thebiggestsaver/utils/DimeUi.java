@@ -13,6 +13,8 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 
+import com.thebiggestsaver.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,9 @@ import java.util.List;
 public class DimeUi
 {
 
+    public enum FillOrNot {
+        fill, notfill
+    }
     public static List<StateListDrawable> buildDrawableStateList(Context context, List<Integer> iconDrawableResource, int color)
     {
         List<StateListDrawable> iconsForSavingsRecord = new ArrayList<StateListDrawable>();
@@ -30,10 +35,10 @@ public class DimeUi
             StateListDrawable stateListDrawable = new StateListDrawable();
 
             stateListDrawable.addState(new int[]{android.R.attr.state_pressed},
-                    buildLayerDrawable(icon, color, Paint.Style.FILL, context));
+                    buildLayerDrawable(icon, color, FillOrNot.fill, context));
 
             stateListDrawable.addState(new int[]{},
-                    buildLayerDrawable(icon, color, Paint.Style.STROKE, context));
+                    buildLayerDrawable(icon, color, FillOrNot.notfill, context));
 
             iconsForSavingsRecord.add(stateListDrawable);
         }
@@ -41,26 +46,33 @@ public class DimeUi
 
     }
 
-    public static LayerDrawable buildLayerDrawable(int iconDrawable, int color, Paint.Style style, Context context)
+    public static LayerDrawable buildLayerDrawable(int iconDrawable, int color, FillOrNot fillOrNot, Context context)
     {
         Drawable imageDrawable;
-        ShapeDrawable imageShape;
+        Drawable imageShape;
         int width = 0;
-        int height = 0;
 
-        if (style == Paint.Style.STROKE)
+        if (fillOrNot == FillOrNot.notfill)
         {
             BitmapDrawable drawable = (BitmapDrawable) context.getResources().getDrawable(iconDrawable);
-            width = drawable.getIntrinsicWidth();
-            height = drawable.getIntrinsicHeight();
+            width = drawable.getIntrinsicWidth()/2;
 
             imageDrawable = tintBitmap(drawable, color, context);
+
         } else
         {
             imageDrawable = context.getResources().getDrawable(iconDrawable);
         }
 
-        imageShape = buildShapeDrawable(color, style, width, height);
+        imageDrawable.setBounds(width,width,width,width);
+
+        if (fillOrNot == FillOrNot.notfill)
+        {
+            imageShape = context.getResources().getDrawable(R.drawable.backing_circle);
+        } else {
+            BitmapDrawable drawable = (BitmapDrawable) context.getResources().getDrawable(R.drawable.backing_circle);
+            imageShape = tintBitmap(drawable, color, context);
+        }
 
         LayerDrawable imageLayout = new LayerDrawable(new Drawable[]
                 {
@@ -87,9 +99,9 @@ public class DimeUi
         return new BitmapDrawable(context.getResources(), newTintedBitmap);
     }
 
-    public static ShapeDrawable buildShapeDrawable(int color, Paint.Style style, int width, int height)
+    public static ShapeDrawable buildShapeDrawable(int color, Paint.Style style, float widtht)
     {
-        int circleWidth = width *3;
+        int circleWidth =100;
 
         ShapeDrawable circle= new ShapeDrawable( new OvalShape());
         circle.setIntrinsicHeight(circleWidth);
@@ -97,8 +109,8 @@ public class DimeUi
 
         circle.getPaint().setColor(color);
         circle.getPaint().setStyle(style);
-        circle.getPaint().setStrokeWidth(8.0f);
-        circle.getPaint().setShadowLayer(10.0f, 10.0f, 10.0f, 0xFF000000);
+        circle.getPaint().setStrokeWidth(7.0f);
+        circle.getPaint().setShadowLayer(100.0f, 100.0f, 100.0f, 0xFF000000);
 
         return circle;
     }
