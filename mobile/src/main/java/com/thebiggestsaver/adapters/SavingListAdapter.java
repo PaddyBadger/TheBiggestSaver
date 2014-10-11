@@ -39,13 +39,16 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
     private Context context;
     private int itemLayout;
     private List<StateListDrawable> iconsForSavingsRecord = new ArrayList<StateListDrawable>();
+    private List<StateListDrawable> backDropForSavingsRecord = new ArrayList<StateListDrawable>();
+    private DimeUi uiHelper;
 
-    public SavingListAdapter(Context context, List<SavingsRecord> savings, int itemLayout)
+    public SavingListAdapter(Context context, List<SavingsRecord> savings, int itemLayout, DimeUi uiHelper)
     {
         super();
         this.context = context;
         this.savings = savings;
         this.itemLayout = itemLayout;
+        this.uiHelper = uiHelper;
     }
 
     @Override
@@ -75,10 +78,20 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         iconArray.add(R.drawable.accept);
         iconArray.add(R.drawable.edit);
 
-        iconsForSavingsRecord = DimeUi.buildDrawableStateList(context, iconArray, colorForIcons);
+        iconsForSavingsRecord = uiHelper.buildDrawableStateList(context, iconArray, colorForIcons, DimeUi.IconOrBack.icon);
+
+        List<Integer> backArray = new ArrayList<Integer>();
+        backArray.add(R.drawable.backing_circle);
+        backArray.add(R.drawable.backing_circle);
+        backArray.add(R.drawable.backing_circle);
+        backArray.add(R.drawable.backing_circle);
+
+        backDropForSavingsRecord = uiHelper.buildDrawableStateList(context, iconArray, colorForIcons, DimeUi.IconOrBack.back);
 
         viewHolder.backIcon.setImageDrawable(iconsForSavingsRecord.get(0));
         viewHolder.acceptIcon.setImageDrawable(iconsForSavingsRecord.get(3));
+        viewHolder.acceptIconBack.setImageDrawable(backDropForSavingsRecord.get(3));
+        viewHolder.backIconBack.setImageDrawable(backDropForSavingsRecord.get(0));
 
         createNextIconView(viewHolder, position, item);
         createDeleteIconView(viewHolder, position, item);
@@ -90,7 +103,7 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
 
     private void createAcceptIconChange(final ViewHolder viewHolder, final SavingsRecord item)
     {
-        viewHolder.acceptIcon.setOnClickListener(new View.OnClickListener()
+        viewHolder.acceptIconContainer.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -99,7 +112,6 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
                 viewHolder.frequency.setEnabled(false);
                 viewHolder.frequencyString.setEnabled(false);
                 viewHolder.amountSaved.setEnabled(false);
-
             }
         });
     }
@@ -113,16 +125,20 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
                 @Override
                 public void run()
                 {
+                    viewHolder.deleteIconContainer.setVisibility(View.VISIBLE);
                     viewHolder.deleteIcon.setImageDrawable(iconsForSavingsRecord.get(1));
+                    viewHolder.deleteIconBack.setImageDrawable(backDropForSavingsRecord.get(1));
                     AnimationSet rollingLeft = rollingLeftCall();
-                    viewHolder.deleteIcon.startAnimation(rollingLeft);
+                    viewHolder.deleteIconContainer.startAnimation(rollingLeft);
                 }
             }, 1000);
         } else
         {
             viewHolder.deleteIcon.setImageDrawable(iconsForSavingsRecord.get(1));
+            viewHolder.deleteIconBack.setImageDrawable(backDropForSavingsRecord.get(1));
+            viewHolder.deleteIconContainer.setVisibility(View.VISIBLE);
         }
-        viewHolder.deleteIcon.setOnClickListener(new View.OnClickListener()
+        viewHolder.deleteIconContainer.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -137,12 +153,13 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         if (i == 0)
         {
             viewHolder.nextIcon.setImageDrawable(iconsForSavingsRecord.get(2));
+            viewHolder.nextIconBack.setImageDrawable(backDropForSavingsRecord.get(2));
             TranslateAnimation anim = bounceFromAbove();
-            viewHolder.nextIcon.startAnimation(anim);
+            viewHolder.nextIconContainer.startAnimation(anim);
         } else
         {
             viewHolder.nextIcon.setImageDrawable(iconsForSavingsRecord.get(2));
-            ;
+            viewHolder.nextIconBack.setImageDrawable(backDropForSavingsRecord.get(2));
         }
         nextOnClick(viewHolder);
     }
@@ -150,6 +167,7 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
     private void resetInitialView(ViewHolder viewHolder)
     {
         //Remove views that the recyclerView may hold onto
+        viewHolder.savingsView.setVisibility(View.GONE);
         viewHolder.nextIcon.setImageDrawable(null);
         viewHolder.deleteIcon.setImageDrawable(null);
         viewHolder.backIcon.setImageDrawable(null);
@@ -158,36 +176,14 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
 
     private void createColorBackground(ViewHolder viewHolder, SavingsRecord item)
     {
-        //Set background to 50% opacity
         String colorString = item.getSavingsType().getColor();
-
-        String[] colorStringArray = colorString.split("");
-        StringBuilder fiftyOpacity = new StringBuilder();
-        for (int j = 0; j < colorStringArray.length; j++)
-        {
-            if (j == 2)
-            {
-                colorStringArray[j] = "B";
-            }
-            if (j == 3)
-            {
-                colorStringArray[j] = "3";
-            }
-            if (j > 0)
-            {
-                fiftyOpacity.append(colorStringArray[j]);
-            }
-        }
-        colorString = fiftyOpacity.toString();
-        int newColor = Color.parseColor(colorString);
+        int newColor = uiHelper.createColorBackground(colorString);
         viewHolder.sliderView.setBackgroundColor(newColor);
-
-
     }
 
     private void backOnClick(final ViewHolder viewHolder)
     {
-        viewHolder.backIcon.setOnClickListener(new View.OnClickListener()
+        viewHolder.backIconContainer.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(final View view)
@@ -201,8 +197,8 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
 
                 viewHolder.savingsView.startAnimation(anim);
                 viewHolder.text.setVisibility(View.VISIBLE);
-                viewHolder.nextIcon.setVisibility(View.VISIBLE);
-                viewHolder.deleteIcon.setVisibility(View.VISIBLE);
+                viewHolder.nextIconContainer.setVisibility(View.VISIBLE);
+                viewHolder.deleteIconContainer.setVisibility(View.VISIBLE);
 
                 new Handler().postDelayed(new Runnable()
                 {
@@ -210,8 +206,8 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
                     public void run()
                     {
                         viewHolder.savingsView.setVisibility(View.GONE);
-                        viewHolder.acceptIcon.setVisibility(View.GONE);
-                        viewHolder.backIcon.setVisibility(View.GONE);
+                        viewHolder.acceptIconContainer.setVisibility(View.GONE);
+                        viewHolder.backIconContainer.setVisibility(View.GONE);
                         nextOnClick(viewHolder);
                     }
                 }, 1000);
@@ -221,14 +217,14 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
 
     private void nextOnClick(final ViewHolder viewHolder)
     {
-        viewHolder.nextIcon.setOnClickListener(new View.OnClickListener()
+        viewHolder.nextIconContainer.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
 
                 view.setVisibility(View.GONE);
-                viewHolder.deleteIcon.setVisibility(View.GONE);
+                viewHolder.deleteIconContainer.setVisibility(View.GONE);
                 viewHolder.text.setVisibility(View.GONE);
                 viewHolder.savingsView.setVisibility(View.VISIBLE);
 
@@ -238,8 +234,8 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
                 anim.setRepeatCount(0);
                 anim.setFillAfter(false);
                 viewHolder.savingsView.startAnimation(anim);
-                viewHolder.acceptIcon.setVisibility(View.VISIBLE);
-                viewHolder.backIcon.setVisibility(View.VISIBLE);
+                viewHolder.acceptIconContainer.setVisibility(View.VISIBLE);
+                viewHolder.backIconContainer.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -247,8 +243,9 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
     private void createNumberPickers(ViewHolder viewHolder, final SavingsRecord item, int position)
     {
         createMultiplierPicker(viewHolder, item);
-        createAmountPicker(viewHolder, item, position);
+        createAmountPicker(viewHolder, item);
         createFrequencyString(viewHolder, item);
+
     }
 
     private void createFrequencyString(ViewHolder viewHolder, final SavingsRecord item)
@@ -257,6 +254,20 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         viewHolder.frequencyString.setMaxValue(frequencyValuesArray.length - 1);
         viewHolder.frequencyString.setMinValue(0);
         viewHolder.frequencyString.setDisplayedValues(frequencyValuesArray);
+        if (item.getFrequency()!= null)
+        {
+            int pickerPosition = 0;
+            for (String s : frequencyValuesArray)
+            {
+                if (s.equals(item.getFrequency()))
+                {
+                    viewHolder.frequencyString.setValue(pickerPosition);
+                }
+                pickerPosition++;
+            }
+        } else {
+            viewHolder.frequencyString.setValue(0);
+        }
         viewHolder.frequencyString.setOnValueChangedListener(new NumberPicker.OnValueChangeListener()
         {
             @Override
@@ -268,7 +279,7 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         });
     }
 
-    private void createAmountPicker(ViewHolder viewHolder, final SavingsRecord item, final int position)
+    private void createAmountPicker(ViewHolder viewHolder, final SavingsRecord item)
     {
         Locale locale = context.getResources().getConfiguration().locale;
         Currency localCurrency = Currency.getInstance(locale);
@@ -283,6 +294,20 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         viewHolder.amountSaved.setMaxValue(savingsAmounts.length - 1);
         viewHolder.amountSaved.setMinValue(0);
         viewHolder.amountSaved.setDisplayedValues(savingsAmounts);
+        if (item.getAmount()!= null)
+        {
+            int pickerPosition = 0;
+            for (String s : savingsAmounts)
+            {
+                if (s.equals(item.getAmount()))
+                {
+                    viewHolder.amountSaved.setValue(pickerPosition);
+                }
+                pickerPosition++;
+            }
+        } else {
+        viewHolder.amountSaved.setValue(0);
+    }
         viewHolder.amountSaved.setOnValueChangedListener(new NumberPicker.OnValueChangeListener()
         {
             @Override
@@ -299,6 +324,12 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
     {
         viewHolder.frequency.setMaxValue(25);
         viewHolder.frequency.setMinValue(0);
+        if (item.getMultiplier()!= null)
+        {
+            viewHolder.frequency.setValue(item.getMultiplier());
+        } else {
+            viewHolder.frequency.setValue(0);
+        }
         viewHolder.frequency.setOnValueChangedListener(new NumberPicker.OnValueChangeListener()
         {
             @Override
@@ -370,10 +401,18 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         public NetworkImageView image;
         public TextView text;
         public ImageView nextIcon;
+        public ImageView nextIconBack;
+        public RelativeLayout nextIconContainer;
         public ImageView deleteIcon;
+        public ImageView deleteIconBack;
+        public RelativeLayout deleteIconContainer;
         public RelativeLayout savingsView;
         public ImageView backIcon;
+        public ImageView backIconBack;
+        public RelativeLayout backIconContainer;
         public ImageView acceptIcon;
+        public ImageView acceptIconBack;
+        public RelativeLayout acceptIconContainer;
         public View sliderView;
         public NumberPicker amountSaved;
         public NumberPicker frequency;
@@ -384,12 +423,25 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
             super(itemView);
             image = (NetworkImageView) itemView.findViewById(R.id.saving_icon);
             text = (TextView) itemView.findViewById(R.id.saving_title);
+
             nextIcon = (ImageView) itemView.findViewById(R.id.next_icon);
+            nextIconBack = (ImageView) itemView.findViewById(R.id.nextIconBackk);
+            nextIconContainer = (RelativeLayout) itemView.findViewById(R.id.nextIconContainer);
+
             deleteIcon = (ImageView) itemView.findViewById(R.id.delete_icon);
+            deleteIconBack = (ImageView) itemView.findViewById(R.id.delete_iconIconBack);
+            deleteIconContainer = (RelativeLayout) itemView.findViewById(R.id.deleteIconContainer);
+
             savingsView = (RelativeLayout) itemView.findViewById(R.id.slider_second_page);
             sliderView = itemView.findViewById(R.id.slider_second_page_backdrop);
             backIcon = (ImageView) itemView.findViewById(R.id.back_icon);
+            backIconBack = (ImageView) itemView.findViewById(R.id.back_iconIconBack);
+            backIconContainer = (RelativeLayout) itemView.findViewById(R.id.backIconContainer);
+
             acceptIcon = (ImageView) itemView.findViewById(R.id.accept_icon);
+            acceptIconBack = (ImageView) itemView.findViewById(R.id.acceptIconBackk);
+            acceptIconContainer = (RelativeLayout) itemView.findViewById(R.id.acceptIconContainer);
+
             amountSaved = (NumberPicker) itemView.findViewById(R.id.money_amount);
             frequency = (NumberPicker) itemView.findViewById(R.id.numeric_frequency);
             frequencyString = (NumberPicker) itemView.findViewById(R.id.text_frequency);
@@ -398,7 +450,6 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
 
     public List<SavingsRecord> getSavingsList()
     {
-
         return savings;
     }
 }

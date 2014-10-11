@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -48,10 +49,16 @@ public class SavingTypeFragment extends Fragment {
         String colorString = savingsTypeList.get(position).getColor();
         int colorForIcons = Color.parseColor(colorString);
 
-        List<StateListDrawable> stateListDrawables = DimeUi.buildDrawableStateList(getActivity(), addIcon, colorForIcons);
+        DimeUi uiHelper = new DimeUi();
 
-        ImageView addIconView = (ImageView) rootView.findViewById(R.id.addIcon);
-        addIconView.setImageDrawable(stateListDrawables.get(0));
+        List<StateListDrawable> stateListIcons = uiHelper.buildDrawableStateList(getActivity(), addIcon, colorForIcons, DimeUi.IconOrBack.icon);
+        List<StateListDrawable> stateListBackground = uiHelper.buildDrawableStateList(getActivity(), addIcon, colorForIcons, DimeUi.IconOrBack.back);
+
+        RelativeLayout addIconView = (RelativeLayout) rootView.findViewById(R.id.addIconContainer);
+        ImageView addIconDrawable = (ImageView) rootView.findViewById(R.id.addIcon);
+        addIconDrawable.setImageDrawable(stateListIcons.get(0));
+        ImageView addIconBack = (ImageView) rootView.findViewById(R.id.addIconBack);
+        addIconBack.setImageDrawable(stateListBackground.get(0));
 
         NetworkImageView icon = (NetworkImageView) rootView.findViewById(R.id.saving_icon);
         icon.setImageUrl(savingsTypeList.get(position).getIconUrl(), MyVolley.getImageLoader());
@@ -68,8 +75,6 @@ public class SavingTypeFragment extends Fragment {
                 ((SavingActivity)getActivity()).recyclerView.scrollToPosition(0);
             }
         });
-
-
         return rootView;
     }
 }

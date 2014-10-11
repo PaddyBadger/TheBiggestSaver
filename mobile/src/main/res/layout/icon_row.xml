@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/recorder_icon_holder_row"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="@dimen/activity_vertical_margin"
+              android:elevation="7dp"
+              android:orientation="horizontal"
+    >
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/saving_icon_one"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_small"
+        android:layout_centerInParent="true"
+        android:elevation="7dp"/>
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/saving_icon_two"
+        android:padding="@dimen/padding_small"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:elevation="7dp"/>
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/saving_icon_three"
+        android:padding="@dimen/padding_small"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:elevation="7dp"/>
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/saving_icon_four"
+        android:padding="@dimen/padding_small"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:elevation="7dp"/>
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/saving_icon_five"
+        android:padding="@dimen/padding_small"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:elevation="7dp"/>
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/saving_icon_six"
+        android:padding="@dimen/padding_small"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:elevation="7dp"/>
+
+</LinearLayout>

@@ -3,18 +3,13 @@ package com.thebiggestsaver.models;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import org.json.JSONObject;
-
-import java.util.Date;
-import java.util.Map;
-
 /**
  * Created by patriciaestridge on 9/1/14.
  */
 @DatabaseTable
 public class SavingsRecord {
     private SavingsType savingsType;
-    private Map<Date, Integer> todaysSavings;
+    private SavingsData[] savingsData;
     @DatabaseField
     private String title;
     @DatabaseField
@@ -94,7 +89,6 @@ public class SavingsRecord {
     }
 
     public void setJsonOfTodaysSavings(String jsonOfTodaysSavings) {
-        jsonOfTodaysSavings = new JSONObject(todaysSavings).toString();
         this.jsonOfTodaysSavings = jsonOfTodaysSavings;
     }
 

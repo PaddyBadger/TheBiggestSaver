@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/recorder_icon_holder_row"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:elevation="7dp"
+              android:orientation="horizontal"
+              android:layout_gravity="center">
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/saving_icon_one"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="@dimen/padding_large"
+        android:elevation="7dp"/>
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/saving_icon_two"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_large"
+        android:layout_centerInParent="true"
+        android:elevation="7dp"/>
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/saving_icon_three"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_large"
+        android:layout_centerInParent="true"
+        android:elevation="7dp"/>
+</LinearLayout>

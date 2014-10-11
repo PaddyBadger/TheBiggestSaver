@@ -3,15 +3,13 @@ package com.thebiggestsaver.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 
 import com.thebiggestsaver.R;
 
@@ -27,7 +25,11 @@ public class DimeUi
     public enum FillOrNot {
         fill, notfill
     }
-    public static List<StateListDrawable> buildDrawableStateList(Context context, List<Integer> iconDrawableResource, int color)
+
+    public enum  IconOrBack {
+        icon, back
+    }
+    public List<StateListDrawable> buildDrawableStateList(Context context, List<Integer> iconDrawableResource, int color, IconOrBack iconOrBack)
     {
         List<StateListDrawable> iconsForSavingsRecord = new ArrayList<StateListDrawable>();
         for (Integer icon : iconDrawableResource)
@@ -35,10 +37,10 @@ public class DimeUi
             StateListDrawable stateListDrawable = new StateListDrawable();
 
             stateListDrawable.addState(new int[]{android.R.attr.state_pressed},
-                    buildLayerDrawable(icon, color, FillOrNot.fill, context));
+                    buildDrawable(icon, color, FillOrNot.fill, context, iconOrBack));
 
             stateListDrawable.addState(new int[]{},
-                    buildLayerDrawable(icon, color, FillOrNot.notfill, context));
+                    buildDrawable(icon, color, FillOrNot.notfill, context, iconOrBack));
 
             iconsForSavingsRecord.add(stateListDrawable);
         }
@@ -46,45 +48,38 @@ public class DimeUi
 
     }
 
-    public static LayerDrawable buildLayerDrawable(int iconDrawable, int color, FillOrNot fillOrNot, Context context)
+    public Drawable buildDrawable(int iconDrawable, int color, FillOrNot fillOrNot, Context context, IconOrBack iconOrBack)
     {
         Drawable imageDrawable;
-        Drawable imageShape;
-        int width = 0;
 
-        if (fillOrNot == FillOrNot.notfill)
+        if (iconOrBack == IconOrBack.icon)
         {
-            BitmapDrawable drawable = (BitmapDrawable) context.getResources().getDrawable(iconDrawable);
-            width = drawable.getIntrinsicWidth()/2;
+            if (fillOrNot == FillOrNot.notfill)
+            {
+                BitmapDrawable drawable = (BitmapDrawable) context.getResources().getDrawable(iconDrawable);
+                imageDrawable = tintBitmap(drawable, color, context);
 
-            imageDrawable = tintBitmap(drawable, color, context);
-
-        } else
-        {
-            imageDrawable = context.getResources().getDrawable(iconDrawable);
-        }
-
-        imageDrawable.setBounds(width,width,width,width);
-
-        if (fillOrNot == FillOrNot.notfill)
-        {
-            imageShape = context.getResources().getDrawable(R.drawable.backing_circle);
+            } else
+            {
+                imageDrawable = context.getResources().getDrawable(iconDrawable);
+            }
         } else {
-            BitmapDrawable drawable = (BitmapDrawable) context.getResources().getDrawable(R.drawable.backing_circle);
-            imageShape = tintBitmap(drawable, color, context);
+            if (fillOrNot == FillOrNot.notfill)
+            {
+                imageDrawable = context.getResources().getDrawable(R.drawable.backing_circle);
+
+            } else {
+                BitmapDrawable drawable = (BitmapDrawable) context.getResources().getDrawable(R.drawable.backing_circle);
+                imageDrawable = tintBitmap(drawable, color, context);
+            }
         }
 
-        LayerDrawable imageLayout = new LayerDrawable(new Drawable[]
-                {
-                        imageShape, imageDrawable
-                });
-
-        return imageLayout;
+        return imageDrawable;
     }
 
-    public static BitmapDrawable tintBitmap(BitmapDrawable drawableToTint, int color, Context context)
+    public BitmapDrawable tintBitmap(BitmapDrawable drawableToTint, int color, Context context)
     {
-        Bitmap oldBitMap = ((BitmapDrawable) drawableToTint).getBitmap();
+        Bitmap oldBitMap = drawableToTint.getBitmap();
 
         Paint newPaint = new Paint();
 
@@ -99,19 +94,27 @@ public class DimeUi
         return new BitmapDrawable(context.getResources(), newTintedBitmap);
     }
 
-    public static ShapeDrawable buildShapeDrawable(int color, Paint.Style style, float widtht)
+    public int createColorBackground(String colorString)
     {
-        int circleWidth =100;
-
-        ShapeDrawable circle= new ShapeDrawable( new OvalShape());
-        circle.setIntrinsicHeight(circleWidth);
-        circle.setIntrinsicWidth( circleWidth);
-
-        circle.getPaint().setColor(color);
-        circle.getPaint().setStyle(style);
-        circle.getPaint().setStrokeWidth(7.0f);
-        circle.getPaint().setShadowLayer(100.0f, 100.0f, 100.0f, 0xFF000000);
-
-        return circle;
+        String[] colorStringArray = colorString.split("");
+        StringBuilder fiftyOpacity = new StringBuilder();
+        for (int j = 0; j < colorStringArray.length; j++)
+        {
+            if (j == 2)
+            {
+                colorStringArray[j] = "B";
+            }
+            if (j == 3)
+            {
+                colorStringArray[j] = "3";
+            }
+            if (j > 0)
+            {
+                fiftyOpacity.append(colorStringArray[j]);
+            }
+        }
+        colorString = fiftyOpacity.toString();
+        int newColor = Color.parseColor(colorString);
+        return newColor;
     }
 }
