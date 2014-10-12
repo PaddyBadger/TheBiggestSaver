@@ -14,11 +14,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.android.volley.toolbox.NetworkImageView;
+
 import com.thebiggestsaver.R;
 import com.thebiggestsaver.models.SavingsRecord;
 import com.thebiggestsaver.utils.DimeUi;
-import com.thebiggestsaver.utils.MyVolley;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,17 +56,17 @@ public class SavingRecorderAdapter extends RecyclerView.Adapter<SavingRecorderAd
     {
         final SavingsRecord item = savings.get(position);
 
-        createNextandBackViews(viewHolder, item);
-        //Set 3 clickable icons, or if there are more than 3, more. Consider how far back in time someone can alter data?
-        //Also, consider the impact that the user's suggested frequency will have for this.
-        createInitialSavingsIcons(viewHolder, item);
-    }
-
-    public void createNextandBackViews(ViewHolder viewHolder, SavingsRecord item)
-    {
         String colorString = item.getSavingsType().getColor();
         int colorForIcons = Color.parseColor(colorString);
 
+        createNextandBackViews(viewHolder, item, colorForIcons);
+        //Set 3 clickable icons, or if there are more than 3, more. Consider how far back in time someone can alter data?
+        //Also, consider the impact that the user's suggested frequency will have for this.
+        createInitialSavingsIcons(viewHolder, item, colorForIcons);
+    }
+
+    public void createNextandBackViews(ViewHolder viewHolder, SavingsRecord item, int colorForIcons)
+    {
         List<Integer> iconArray = new ArrayList<Integer>();
         iconArray.add(R.drawable.back);
         iconArray.add(R.drawable.next);
@@ -145,62 +144,39 @@ public class SavingRecorderAdapter extends RecyclerView.Adapter<SavingRecorderAd
         });
     }
 
-    public void createInitialSavingsIcons(ViewHolder viewHolder, SavingsRecord item)
+    public void createInitialSavingsIcons(ViewHolder viewHolder, SavingsRecord item, int colorForIcons)
     {
-       /* int numberToShow = item.getMultiplier();
-        int numberOfLayouts = numberToShow/3;
+        viewHolder.iconHolder.removeAllViews();
+        View rowOfThree = LayoutInflater.from(context).inflate(R.layout.icon_group, viewHolder.iconHolder, false);
+        viewHolder.iconHolder.addView(rowOfThree);
 
-        if (numberOfLayouts == 0 || numberOfLayouts == 1)
-        {*/
-            View rowOfThree = LayoutInflater.from(context).inflate(R.layout.icon_group, viewHolder.iconHolder, false);
-            viewHolder.iconHolder.addView(rowOfThree);
+        String iconString = item.getSavingsTypeId();
+        int iconId = context.getResources().getIdentifier(iconString, "drawable", context.getPackageName());
 
-            List<NetworkImageView> iconImageViews = new ArrayList<NetworkImageView>();
-            iconImageViews.add((NetworkImageView) rowOfThree.findViewById(R.id.saving_icon_one));
-            iconImageViews.add((NetworkImageView) rowOfThree.findViewById(R.id.saving_icon_two));
-            iconImageViews.add((NetworkImageView) rowOfThree.findViewById(R.id.saving_icon_three));
+        List<Integer> iconsForState = new ArrayList<Integer>();
+        iconsForState.add(iconId);
+        iconsForState.add(iconId);
+        iconsForState.add(iconId);
+        List<StateListDrawable> drawable = uiHelper.buildCheckableIconList(context, iconsForState, colorForIcons);
 
-            for (NetworkImageView iconImageView : iconImageViews)
-            {
-                iconImageView.setImageUrl(item.getSavingsType().getIconUrl(), MyVolley.getImageLoader());
-            }
+//        Drawable drawable = context.getResources().getDrawable(iconId);
+//        ColorStateList stateList = new ColorStateList(
+//                new int[][] {new int[] { android.R.attr.state_pressed, android.R.attr.defaultValue},},
+//                             new int[] {context.getResources().getColor(R.color.grey_text),colorForIcons,
+//                });
+//        drawable.setTint(stateList, PorterDuff.Mode.MULTIPLY);
 
-//        } else if (numberOfLayouts > 1 && numberOfLayouts <= 4)
-//        {
-//
-//            View rowOfSix = LayoutInflater.from(context).inflate(R.layout.icon_row, viewHolder.iconHolder, false);
-//            viewHolder.iconHolder.addView(rowOfSix);
-//            View secondRowOfSix = LayoutInflater.from(context).inflate(R.layout.icon_row, viewHolder.iconHolder, false);
-//            viewHolder.iconHolder.addView(secondRowOfSix);
-//
-//            List<NetworkImageView> iconImageViews = new ArrayList<NetworkImageView>();
-//            iconImageViews.add((NetworkImageView) rowOfSix.findViewById(R.id.saving_icon_one));
-//            iconImageViews.add((NetworkImageView) rowOfSix.findViewById(R.id.saving_icon_two));
-//            iconImageViews.add((NetworkImageView) rowOfSix.findViewById(R.id.saving_icon_three));
-//            iconImageViews.add((NetworkImageView) rowOfSix.findViewById(R.id.saving_icon_four));
-//            iconImageViews.add((NetworkImageView) rowOfSix.findViewById(R.id.saving_icon_five));
-//            iconImageViews.add((NetworkImageView) rowOfSix.findViewById(R.id.saving_icon_six));
-//            iconImageViews.add((NetworkImageView) secondRowOfSix.findViewById(R.id.saving_icon_one));
-//            iconImageViews.add((NetworkImageView) secondRowOfSix.findViewById(R.id.saving_icon_two));
-//            iconImageViews.add((NetworkImageView) secondRowOfSix.findViewById(R.id.saving_icon_three));
-//            iconImageViews.add((NetworkImageView) secondRowOfSix.findViewById(R.id.saving_icon_four));
-//            iconImageViews.add((NetworkImageView) secondRowOfSix.findViewById(R.id.saving_icon_five));
-//            iconImageViews.add((NetworkImageView) secondRowOfSix.findViewById(R.id.saving_icon_six));
-//
-//            for (NetworkImageView iconImageView : iconImageViews)
-//            {
-//                iconImageView.setImageUrl(item.getSavingsType().getIconUrl(), MyVolley.getImageLoader());
-//            }
- //       }
+        List<ImageView> iconImageViews = new ArrayList<ImageView>();
+        iconImageViews.add((ImageView) rowOfThree.findViewById(R.id.saving_icon_one));
+        iconImageViews.add((ImageView) rowOfThree.findViewById(R.id.saving_icon_two));
+        iconImageViews.add((ImageView) rowOfThree.findViewById(R.id.saving_icon_three));
 
-        // Calculate the number
-
-        // Add the views into the viewHolder container
-
-        //Set the icons to colored or not colored (multi colored can wait)
-
-        //set click listeners - convert to gson and write to db here
-
+        int drawablePosition = 0;
+        for (ImageView iconImageView : iconImageViews)
+        {
+            iconImageView.setImageDrawable(drawable.get(drawablePosition));
+            drawablePosition++;
+        }
     }
 
     @Override

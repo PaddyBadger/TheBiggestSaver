@@ -101,6 +101,7 @@ public class SavingActivity extends FragmentActivity
             Fragment fragmentSavingsType = new SavingTypeFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_NUMBER, position);
+            
             fragmentSavingsType.setArguments(args);
             return fragmentSavingsType;
         }

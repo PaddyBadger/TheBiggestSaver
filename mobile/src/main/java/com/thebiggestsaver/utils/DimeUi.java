@@ -21,7 +21,6 @@ import java.util.List;
  */
 public class DimeUi
 {
-
     public enum FillOrNot {
         fill, notfill
     }
@@ -29,6 +28,7 @@ public class DimeUi
     public enum  IconOrBack {
         icon, back
     }
+
     public List<StateListDrawable> buildDrawableStateList(Context context, List<Integer> iconDrawableResource, int color, IconOrBack iconOrBack)
     {
         List<StateListDrawable> iconsForSavingsRecord = new ArrayList<StateListDrawable>();
@@ -45,7 +45,22 @@ public class DimeUi
             iconsForSavingsRecord.add(stateListDrawable);
         }
         return iconsForSavingsRecord;
+    }
 
+    public List<StateListDrawable> buildCheckableIconList(Context context, List<Integer> icons, int color)
+    {
+        List<StateListDrawable> iconsForRecording = new ArrayList<StateListDrawable>();
+        for (Integer icon : icons)
+        {
+            StateListDrawable drawableStates = new StateListDrawable();
+            drawableStates.addState(new int[]{android.R.attr.state_checked},
+                    buildDrawable(icon, color, FillOrNot.notfill, context, IconOrBack.icon));
+
+            drawableStates.addState(new int[]{},
+                    buildDrawable(icon, color, FillOrNot.notfill, context, IconOrBack.icon));
+            iconsForRecording.add(drawableStates);
+        }
+        return iconsForRecording;
     }
 
     public Drawable buildDrawable(int iconDrawable, int color, FillOrNot fillOrNot, Context context, IconOrBack iconOrBack)
@@ -73,7 +88,6 @@ public class DimeUi
                 imageDrawable = tintBitmap(drawable, color, context);
             }
         }
-
         return imageDrawable;
     }
 
@@ -117,4 +131,6 @@ public class DimeUi
         int newColor = Color.parseColor(colorString);
         return newColor;
     }
+
+
 }

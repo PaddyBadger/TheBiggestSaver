@@ -2,7 +2,7 @@
 <resources>
     <color name="theme_blue">#0030ff</color>
     <color name="theme_background">#f5f5f5</color>
-    <color name="grey_text">#7d7979</color>
+    <color name="grey_text">#ff7d7979</color>
     <color name="white">#ffffff</color>
     <color name="white_opacity">#ccffffff</color>
     <color name="slightly_off_white">#fffafafa</color>
