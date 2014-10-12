@@ -20,7 +20,7 @@
         android:textSize="16sp"
         android:elevation="7dp"/>
 
-    <com.android.volley.toolbox.NetworkImageView
+    <ImageView
         android:layout_margin="50dp"
         android:id="@+id/saving_icon"
         android:layout_width="wrap_content"

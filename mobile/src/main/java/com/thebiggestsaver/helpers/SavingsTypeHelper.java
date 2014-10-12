@@ -27,7 +27,7 @@ public class SavingsTypeHelper
             String iconString = savingsTypeArrayShortTitles[position];
             savingType.setId(savingsTypeArrayShortTitles[position]);
 
-            savingType.setIconUrl("https://raw.githubusercontent.com/PaddyBadger/TheBiggestSaver/master/mobile/src/main/res/drawable-xhdpi/" + iconString + ".png");
+            savingType.setIconString(iconString);
 
             int colorInt = context.getResources().getIdentifier(iconString, "color", context.getPackageName());
             String colorString = context.getResources().getString(colorInt);

@@ -1,7 +1,10 @@
 package com.thebiggestsaver.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.thebiggestsaver.R;
+import com.thebiggestsaver.models.SavingsData;
 import com.thebiggestsaver.models.SavingsRecord;
 import com.thebiggestsaver.utils.DimeUi;
 
@@ -157,25 +161,55 @@ public class SavingRecorderAdapter extends RecyclerView.Adapter<SavingRecorderAd
         iconsForState.add(iconId);
         iconsForState.add(iconId);
         iconsForState.add(iconId);
-        List<StateListDrawable> drawable = uiHelper.buildCheckableIconList(context, iconsForState, colorForIcons);
 
-//        Drawable drawable = context.getResources().getDrawable(iconId);
-//        ColorStateList stateList = new ColorStateList(
-//                new int[][] {new int[] { android.R.attr.state_pressed, android.R.attr.defaultValue},},
-//                             new int[] {context.getResources().getColor(R.color.grey_text),colorForIcons,
-//                });
-//        drawable.setTint(stateList, PorterDuff.Mode.MULTIPLY);
+        List<Boolean> checkedOrNot = new ArrayList<Boolean>();
+
+        if (item.getSavingsData() != null)
+        {
+            SavingsData[] savingsData = item.getSavingsData();
+
+        }
+        else if (item.getMultiplier()!=null)
+        {
+            int numberOfSavingsRecorded = item.getMultiplier();
+            for (int i = 0; i < numberOfSavingsRecorded; i++)
+            {
+                checkedOrNot.add(false);
+            }
+        }
+        else
+        {
+
+        }
+
+
+        final Drawable drawable = context.getResources().getDrawable(iconId);
+        ColorStateList statePrePressed = new ColorStateList(
+                new int[][] {new int[] {},},
+                             new int[] {context.getResources().getColor(R.color.grey_text)});
+        final ColorStateList postPressed = new ColorStateList(
+                new int[][] {new int[] {},},
+                new int[] {colorForIcons});
+
+        drawable.setTint(statePrePressed, PorterDuff.Mode.MULTIPLY);
 
         List<ImageView> iconImageViews = new ArrayList<ImageView>();
         iconImageViews.add((ImageView) rowOfThree.findViewById(R.id.saving_icon_one));
         iconImageViews.add((ImageView) rowOfThree.findViewById(R.id.saving_icon_two));
         iconImageViews.add((ImageView) rowOfThree.findViewById(R.id.saving_icon_three));
 
-        int drawablePosition = 0;
         for (ImageView iconImageView : iconImageViews)
         {
-            iconImageView.setImageDrawable(drawable.get(drawablePosition));
-            drawablePosition++;
+            iconImageView.setImageDrawable(drawable);
+            iconImageView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+
+                    drawable.setTint(postPressed, PorterDuff.Mode.MULTIPLY);
+                }
+            });
         }
     }
 

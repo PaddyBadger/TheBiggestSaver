@@ -25,6 +25,15 @@ public class SavingsRecord {
     @DatabaseField
     private Integer multiplier;
 
+    public SavingsData[] getSavingsData()
+    {
+        return savingsData;
+    }
+
+    public void setSavingsData(SavingsData[] savingsData)
+    {
+        this.savingsData = savingsData;
+    }
 
     public String getAmount() {
         return amount;

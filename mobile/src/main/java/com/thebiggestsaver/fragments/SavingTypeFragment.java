@@ -1,6 +1,9 @@
 package com.thebiggestsaver.fragments;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,14 +14,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.thebiggestsaver.R;
 import com.thebiggestsaver.activities.SavingActivity;
 import com.thebiggestsaver.helpers.SavingsTypeHelper;
 import com.thebiggestsaver.models.SavingsRecord;
 import com.thebiggestsaver.models.SavingsType;
 import com.thebiggestsaver.utils.DimeUi;
-import com.thebiggestsaver.utils.MyVolley;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +61,18 @@ public class SavingTypeFragment extends Fragment {
         ImageView addIconBack = (ImageView) rootView.findViewById(R.id.addIconBack);
         addIconBack.setImageDrawable(stateListBackground.get(0));
 
-        NetworkImageView icon = (NetworkImageView) rootView.findViewById(R.id.saving_icon);
-        icon.setImageUrl(savingsTypeList.get(position).getIconUrl(), MyVolley.getImageLoader());
+        String iconString = savingsTypeList.get(position).getIconString();
+        int iconId = getActivity().getResources().getIdentifier(iconString, "drawable", getActivity().getPackageName());
+
+        Drawable drawable = getActivity().getResources().getDrawable(iconId);
+        ColorStateList stateList = new ColorStateList(
+                new int[][] {new int[] {},},
+                             new int[] {colorForIcons,
+                });
+        drawable.setTint(stateList, PorterDuff.Mode.MULTIPLY);
+
+        ImageView icon = (ImageView) rootView.findViewById(R.id.saving_icon);
+        icon.setImageDrawable(drawable);
 
         addIconView.setOnClickListener(new View.OnClickListener() {
             @Override

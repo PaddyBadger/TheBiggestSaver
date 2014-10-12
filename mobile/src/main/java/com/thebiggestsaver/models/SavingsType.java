@@ -7,7 +7,7 @@ public class SavingsType {
 
     private String color;
     private String delete;
-    private String iconUrl;
+    private String iconString;
     private String id;
     private String title;
 
@@ -27,12 +27,12 @@ public class SavingsType {
         this.delete = delete;
     }
 
-    public String getIconUrl() {
-        return iconUrl;
+    public String getIconString() {
+        return iconString;
     }
 
-    public void setIconUrl(String iconUrl) {
-        this.iconUrl = iconUrl;
+    public void setIconString(String iconString) {
+        this.iconString = iconString;
     }
 
     public String getId() {

@@ -1,7 +1,10 @@
 package com.thebiggestsaver.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
@@ -19,11 +22,9 @@ import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.thebiggestsaver.R;
 import com.thebiggestsaver.models.SavingsRecord;
 import com.thebiggestsaver.utils.DimeUi;
-import com.thebiggestsaver.utils.MyVolley;
 
 import java.util.ArrayList;
 import java.util.Currency;
@@ -66,10 +67,20 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         resetInitialView(viewHolder);
 
         viewHolder.text.setText(item.getSavingsType().getTitle());
-        viewHolder.image.setImageUrl(item.getSavingsType().getIconUrl(), MyVolley.getImageLoader());
 
         String colorString = item.getSavingsType().getColor();
         int colorForIcons = Color.parseColor(colorString);
+
+        String iconString = item.getSavingsType().getIconString();
+        int iconId = context.getResources().getIdentifier(iconString, "drawable", context.getPackageName());
+
+        Drawable drawable = context.getResources().getDrawable(iconId);
+        ColorStateList stateList = new ColorStateList(
+                new int[][] {new int[] {},},
+                new int[] {colorForIcons,
+                });
+        drawable.setTint(stateList, PorterDuff.Mode.MULTIPLY);
+        viewHolder.image.setImageDrawable(drawable);
 
         List<Integer> iconArray = new ArrayList<Integer>();
         iconArray.add(R.drawable.back);
@@ -398,7 +409,7 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder
     {
-        public NetworkImageView image;
+        public ImageView image;
         public TextView text;
         public ImageView nextIcon;
         public ImageView nextIconBack;
@@ -421,7 +432,7 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         public ViewHolder(View itemView)
         {
             super(itemView);
-            image = (NetworkImageView) itemView.findViewById(R.id.saving_icon);
+            image = (ImageView) itemView.findViewById(R.id.saving_icon);
             text = (TextView) itemView.findViewById(R.id.saving_title);
 
             nextIcon = (ImageView) itemView.findViewById(R.id.next_icon);
