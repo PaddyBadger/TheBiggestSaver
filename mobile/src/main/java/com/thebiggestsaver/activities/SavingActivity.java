@@ -64,14 +64,14 @@ public class SavingActivity extends FragmentActivity {
     }
 
     private void createRecyclerView() {
-        recyclerView = (RecyclerView) findViewById(R.id.signup_list);
-        savings = new ArrayList<SavingsType>();
-        savingListAdapter = new SavingListAdapter(this, savingsRecords, R.layout.savings_recycler_view);
-        recyclerView.setAdapter(savingListAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setHasFixedSize(true);
-    }
+            recyclerView = (RecyclerView) findViewById(R.id.signup_list);
+            savings = new ArrayList<SavingsType>();
+            savingListAdapter = new SavingListAdapter(this, savingsRecords, R.layout.savings_recycler_view);
+            recyclerView.setAdapter(savingListAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setHasFixedSize(true);
+        }
 
     public void createTopPager() {
             SavingPagerAdapter savingPagerAdapter = new SavingPagerAdapter(getSupportFragmentManager());
@@ -92,14 +92,14 @@ public class SavingActivity extends FragmentActivity {
         SavingsTypeHelper savingsTypeHelper = new SavingsTypeHelper();
         List<SavingsType> savingsTypeToAppend = savingsTypeHelper.savingsTypeHelperBuildList(context);
 
-//        List<String> savingsGson = new ArrayList<String>();
-//        for (SavingsType savingsType : savingsTypeToAppend) {
-//            String typeGson = new Gson().toJson(savingsType);
-//            savingsGson.add(typeGson);
-//        }
-//
-//        savingsGson.toString();
-//        Log.e("list", savingsGson.toString());
+        List<String> savingsGson = new ArrayList<String>();
+        for (SavingsType savingsType : savingsTypeToAppend) {
+            String typeGson = new Gson().toJson(savingsType);
+            savingsGson.add(typeGson);
+        }
+
+        String allJson = savingsGson.toString();
+        Log.e("list", savingsGson.toString());
 
         for (SavingsRecord storedSavingsRecord : savingsRecords)
         {
