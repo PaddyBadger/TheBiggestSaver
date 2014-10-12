@@ -1,7 +1,6 @@
 package com.thebiggestsaver.helpers;
 
 import android.content.Context;
-
 import com.thebiggestsaver.R;
 import com.thebiggestsaver.models.SavingsType;
 import java.util.ArrayList;
@@ -28,17 +27,11 @@ public class SavingsTypeHelper
             String iconString = savingsTypeArrayShortTitles[position];
             savingType.setId(savingsTypeArrayShortTitles[position]);
 
+            savingType.setIconUrl("https://raw.githubusercontent.com/PaddyBadger/TheBiggestSaver/master/mobile/src/main/res/drawable-xhdpi/" + iconString + ".png");
+
             int colorInt = context.getResources().getIdentifier(iconString, "color", context.getPackageName());
             String colorString = context.getResources().getString(colorInt);
             savingType.setColor(colorString);
-
-            savingType.setIconUrl("https://raw.githubusercontent.com/PaddyBadger/TheBiggestSaver/master/mobile/src/main/res/drawable-xhdpi/" + iconString + ".png");
-            savingType.setAdd("https://raw.githubusercontent.com/PaddyBadger/TheBiggestSaver/master/mobile/src/main/res/drawable-xhdpi/" + iconString + "add.png");
-            savingType.setNext("https://raw.githubusercontent.com/PaddyBadger/TheBiggestSaver/master/mobile/src/main/res/drawable-xhdpi/" + iconString + "next.png");
-            savingType.setBack("https://raw.githubusercontent.com/PaddyBadger/TheBiggestSaver/master/mobile/src/main/res/drawable-xhdpi/" + iconString + "back.png");
-            savingType.setAccept("https://raw.githubusercontent.com/PaddyBadger/TheBiggestSaver/master/mobile/src/main/res/drawable-xhdpi/" + iconString + "accept.png");
-            savingType.setDelete("https://raw.githubusercontent.com/PaddyBadger/TheBiggestSaver/master/mobile/src/main/res/drawable-xhdpi/" + iconString + "delete.png");
-            savingType.setEdit("https://raw.githubusercontent.com/PaddyBadger/TheBiggestSaver/master/mobile/src/main/res/drawable-xhdpi/" + iconString + "edit.png");
 
             savingsTypeList.add(savingType);
         }

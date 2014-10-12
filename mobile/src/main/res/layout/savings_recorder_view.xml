@@ -17,7 +17,7 @@
             android:elevation="5dp" />
 
         <com.thebiggestsaver.utils.typeface.TypefaceTextView
-            android:id="@+id/saving_title"
+            android:id="@+id/saving_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -28,13 +28,18 @@
             android:textColor="@color/grey_text"
             android:textSize="16sp" />
 
-        <com.android.volley.toolbox.NetworkImageView
-            android:id="@+id/saving_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_margin="42dp"
-            android:elevation="7dp" />
+        <LinearLayout
+            android:id="@+id/recorder_icon_holder_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:elevation="7dp"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center">
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/nextIconContainer"
@@ -58,27 +63,27 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/deleteIconContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:elevation="20dp"
-            android:paddingLeft="4dp">
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/addIconContainer"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:elevation="20dp"-->
+            <!--android:paddingLeft="4dp">-->
 
-            <ImageView
-                android:id="@+id/delete_iconIconBack"
-                android:layout_width="55dp"
-                android:layout_height="55dp"/>
+            <!--<ImageView-->
+                <!--android:id="@+id/add_iconIconBack"-->
+                <!--android:layout_width="55dp"-->
+                <!--android:layout_height="55dp"/>-->
 
-            <ImageView
-                android:id="@+id/delete_icon"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                android:padding="16dp"/>
+            <!--<ImageView-->
+                <!--android:id="@+id/add_icon"-->
+                <!--android:layout_width="55dp"-->
+                <!--android:layout_height="55dp"-->
+                <!--android:padding="16dp"/>-->
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
     </RelativeLayout>
 
     <RelativeLayout
@@ -99,6 +104,7 @@
             />
 
         <com.thebiggestsaver.utils.typeface.TypefaceTextView
+            android:id="@+id/summary_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -106,81 +112,45 @@
             android:layout_marginRight="24dp"
             android:layout_marginTop="8dp"
             android:elevation="7dp"
-            android:text="Potential Savings"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:layout_gravity="top"
             android:orientation="horizontal"
             android:layout_marginLeft="@dimen/activity_vertical_margin">
 
-            <NumberPicker
-                android:id="@+id/money_amount"
+            <com.thebiggestsaver.utils.typeface.TypefaceTextView
+                android:id="@+id/amount_saved"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="8dp"
-                android:background="@android:color/transparent"/>
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="100dp"
-                android:layout_margin="5dp"
-
-                android:layout_gravity="center_vertical"
-                android:background="@color/white" />
-
-            <NumberPicker
-                android:id="@+id/numeric_frequency"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="$100"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_large"/>
+            <com.thebiggestsaver.utils.typeface.TypefaceTextView
+                android:id="@+id/times_saved"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="8dp"/>
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp"
-                android:background="@color/white"
-                />
-
-            <NumberPicker
-                android:id="@+id/text_frequency"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="50 times"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_large"/>
+            <com.thebiggestsaver.utils.typeface.TypefaceTextView
+                android:id="@+id/over_time_period"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_weight="2" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="100 days"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_large"/>
         </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/acceptIconContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:paddingRight="4dp"
-            android:elevation="10dp">
-
-            <ImageView
-                android:id="@+id/acceptIconBackk"
-                android:layout_width="55dp"
-                android:layout_height="55dp"/>
-
-            <ImageView
-                android:id="@+id/accept_icon"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                android:padding="16dp"/>
-
-        </RelativeLayout>
+        <View android:id="@+id/color_indicators_go_here"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"/>
 
         <RelativeLayout
             android:id="@+id/backIconContainer"

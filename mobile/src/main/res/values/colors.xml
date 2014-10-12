@@ -5,6 +5,7 @@
     <color name="grey_text">#7d7979</color>
     <color name="white">#ffffff</color>
     <color name="white_opacity">#ccffffff</color>
+    <color name="slightly_off_white">#fffafafa</color>
     <color name="background_holo_light">#fff3f3f3</color>
 
     <!--blues-->
