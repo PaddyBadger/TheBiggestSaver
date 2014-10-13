@@ -15,6 +15,7 @@ import com.thebiggestsaver.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by patriciaestridge on 9/29/14.
@@ -132,5 +133,11 @@ public class DimeUi
         return newColor;
     }
 
-
+    public String randomColor(Context context)
+    {
+        String[] stringArray = context.getResources().getStringArray(R.array.color_array);
+        int idx = new Random().nextInt(stringArray.length);
+        String colorString = stringArray[idx];
+        return colorString;
+    }
 }

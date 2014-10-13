@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.thebiggestsaver.R;
+import com.thebiggestsaver.models.DisplayData;
 import com.thebiggestsaver.models.SavingsData;
 import com.thebiggestsaver.models.SavingsRecord;
 import com.thebiggestsaver.utils.DimeUi;
@@ -66,7 +67,7 @@ public class SavingRecorderAdapter extends RecyclerView.Adapter<SavingRecorderAd
         createNextandBackViews(viewHolder, item, colorForIcons);
         //Set 3 clickable icons, or if there are more than 3, more. Consider how far back in time someone can alter data?
         //Also, consider the impact that the user's suggested frequency will have for this.
-        createInitialSavingsIcons(viewHolder, item, colorForIcons);
+        createSavingsIcons(viewHolder, item, colorForIcons);
     }
 
     public void createNextandBackViews(ViewHolder viewHolder, SavingsRecord item, int colorForIcons)
@@ -148,70 +149,145 @@ public class SavingRecorderAdapter extends RecyclerView.Adapter<SavingRecorderAd
         });
     }
 
-    public void createInitialSavingsIcons(ViewHolder viewHolder, SavingsRecord item, int colorForIcons)
+    public void createSavingsIcons(final ViewHolder viewHolder, final SavingsRecord item, final int colorForIcons)
     {
         viewHolder.iconHolder.removeAllViews();
-        View rowOfThree = LayoutInflater.from(context).inflate(R.layout.icon_group, viewHolder.iconHolder, false);
-        viewHolder.iconHolder.addView(rowOfThree);
+        View iconView = LayoutInflater.from(context).inflate(R.layout.icon_view, viewHolder.iconHolder, false);
 
         String iconString = item.getSavingsTypeId();
         int iconId = context.getResources().getIdentifier(iconString, "drawable", context.getPackageName());
 
-        List<Integer> iconsForState = new ArrayList<Integer>();
-        iconsForState.add(iconId);
-        iconsForState.add(iconId);
-        iconsForState.add(iconId);
+        final List<DisplayData> dataToDisplay = createListOfDisplayData(item);
 
-        List<Boolean> checkedOrNot = new ArrayList<Boolean>();
-
-        if (item.getSavingsData() != null)
+        List<Drawable> iconsForState = new ArrayList<Drawable>();
+        for (DisplayData displayData : dataToDisplay)
         {
-            SavingsData[] savingsData = item.getSavingsData();
-
+            Drawable drawable = context.getResources().getDrawable(iconId);
+            int colorForIcon = Color.parseColor(displayData.getColor());
+            ColorStateList iconColorTint = new ColorStateList(
+                    new int[][]{new int[]{},},
+                    new int[]{colorForIcon});
+            drawable.setTint(iconColorTint, PorterDuff.Mode.MULTIPLY);
+            iconsForState.add(drawable);
         }
-        else if (item.getMultiplier()!=null)
+        renderData(viewHolder, item, colorForIcons, iconView, dataToDisplay, iconsForState);
+    }
+
+    private void renderData(final ViewHolder viewHolder, final SavingsRecord item, final int colorForIcons, View iconView, final List<DisplayData> dataToDisplay, List<Drawable> iconsForState)
+    {
+        final int dataPosition = 0;
+        for (Drawable drawable : iconsForState)
         {
-            int numberOfSavingsRecorded = item.getMultiplier();
-            for (int i = 0; i < numberOfSavingsRecorded; i++)
-            {
-                checkedOrNot.add(false);
-            }
-        }
-        else
-        {
-
-        }
-
-
-        final Drawable drawable = context.getResources().getDrawable(iconId);
-        ColorStateList statePrePressed = new ColorStateList(
-                new int[][] {new int[] {},},
-                             new int[] {context.getResources().getColor(R.color.grey_text)});
-        final ColorStateList postPressed = new ColorStateList(
-                new int[][] {new int[] {},},
-                new int[] {colorForIcons});
-
-        drawable.setTint(statePrePressed, PorterDuff.Mode.MULTIPLY);
-
-        List<ImageView> iconImageViews = new ArrayList<ImageView>();
-        iconImageViews.add((ImageView) rowOfThree.findViewById(R.id.saving_icon_one));
-        iconImageViews.add((ImageView) rowOfThree.findViewById(R.id.saving_icon_two));
-        iconImageViews.add((ImageView) rowOfThree.findViewById(R.id.saving_icon_three));
-
-        for (ImageView iconImageView : iconImageViews)
-        {
-            iconImageView.setImageDrawable(drawable);
-            iconImageView.setOnClickListener(new View.OnClickListener()
+            viewHolder.iconHolder.addView(iconView);
+            final ImageView imageView = (ImageView) iconView.findViewById(R.id.saving_icon_one);
+            imageView.setImageDrawable(drawable);
+            iconView.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View view)
                 {
+                    boolean isChecked = dataToDisplay.get(dataPosition).isChecked();
 
-                    drawable.setTint(postPressed, PorterDuff.Mode.MULTIPLY);
+                    DisplayData displayData = dataToDisplay.get(dataPosition);
+                    displayData.setChecked(isChecked ? false : true);
+                    displayData.setColor(isChecked ? uiHelper.randomColor(context) : "#ff7d7979");
+                    if (isChecked)
+                    {
+                       removeSavingsRecordDisplayData(item);
+
+                    } else {
+                        addSavingsRecordDisplayData(item, displayData);
+                    }
+                    createSavingsIcons(viewHolder, item, colorForIcons);
                 }
             });
         }
     }
+
+    public void removeSavingsRecordDisplayData(SavingsRecord item)
+    {
+        List<SavingsData> savingsData = item.getSavingsData();
+        SavingsData lastItem = savingsData.get(savingsData.size()-1);
+        List<DisplayData> displayData = lastItem.getDisplayData();
+        displayData.remove(displayData.size()-1);
+        lastItem.setAmount(displayData.size()+1);
+    }
+
+    public void addSavingsRecordDisplayData(SavingsRecord item, DisplayData newData)
+    {
+        //Check if there is already data for today, or add new SavingsData, if there is no existing SavingsData, create a new one
+        if (item.getSavingsData()!=null)
+        {
+            List<SavingsData> savingsData = item.getSavingsData();
+            SavingsData lastItem = savingsData.get(savingsData.size()-1);
+            //if last item is today, add to it, if not, add a new one
+            boolean isToday = false;
+            if (isToday)
+            {
+                List<DisplayData> displayData = lastItem.getDisplayData();
+                displayData.add(newData);
+                lastItem.setAmount(displayData.size() + 1);
+            } else {
+               SavingsData newSavingsData =  createNewSavingsDataForToday(item);
+                savingsData.add(newSavingsData);
+            }
+        } else {
+            List<SavingsData> firstSetOfSavingsData = new ArrayList<SavingsData>();
+            SavingsData newSavingsData = createNewSavingsDataForToday(item);
+            firstSetOfSavingsData.add(newSavingsData);
+            item.setSavingsData(firstSetOfSavingsData);
+        }
+
+    }
+
+    private SavingsData createNewSavingsDataForToday(SavingsRecord item)
+    {
+        SavingsData newSavingsData = new SavingsData();
+//        set millis
+//        add display data
+//        setCount from display data size
+
+        return newSavingsData;
+    }
+
+
+
+    private List<DisplayData> createListOfDisplayData(SavingsRecord item)
+    {
+        List<DisplayData> newDataToDisplay = new ArrayList<DisplayData>();
+
+        if (item.getSavingsData() != null)
+        {
+
+            List<SavingsData> savingsData = item.getSavingsData();
+            for (SavingsData data : savingsData)
+            {
+                if (data.getDisplayData() != null)
+                {
+                    List<DisplayData> displayData = data.getDisplayData();
+                    for (DisplayData displayData1 : displayData)
+                    {
+                        newDataToDisplay.add(displayData1);
+                    }
+                }
+            }
+            DisplayData newData = new DisplayData();
+            newData.setChecked(false);
+            newData.setColor("#ff7d7979");
+            newDataToDisplay.add(newData);
+        } else
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                DisplayData newData = new DisplayData();
+                newData.setChecked(false);
+                newData.setColor("#ff7d7979");
+                newDataToDisplay.add(newData);
+            }
+        }
+        return newDataToDisplay;
+    }
+
 
     @Override
     public int getItemCount()
@@ -257,11 +333,17 @@ public class SavingRecorderAdapter extends RecyclerView.Adapter<SavingRecorderAd
             backIcon = (ImageView) itemView.findViewById(R.id.back_icon);
             backBack = (ImageView) itemView.findViewById(R.id.back_iconIconBack);
         }
+
     }
 
     public void dataSetChanged(List<SavingsRecord> list)
     {
         this.savings = list;
         notifyDataSetChanged();
+    }
+
+    public List<SavingsRecord> getSavingsList()
+    {
+        return savings;
     }
 }

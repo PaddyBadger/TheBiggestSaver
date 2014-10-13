@@ -8,15 +8,22 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.j256.ormlite.dao.Dao;
 import com.thebiggestsaver.R;
 import com.thebiggestsaver.actionbars.BackBar;
 import com.thebiggestsaver.adapters.SavingRecorderAdapter;
+import com.thebiggestsaver.helpers.DatabaseHelper;
 import com.thebiggestsaver.helpers.DatabaseReader;
 import com.thebiggestsaver.models.SavingsRecord;
 import com.thebiggestsaver.utils.DimeUi;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,5 +80,49 @@ public class RecordSavingsActivity extends FragmentActivity
         DatabaseReader reader = new DatabaseReader();
         savingsRecords = reader.checkForExistingRecords(context);
         savingRecordingAdapter.dataSetChanged(savingsRecords);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.saving, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int id = item.getItemId();
+        if (id == R.id.action_settings)
+        {
+
+            List<SavingsRecord> savingsList = savingRecordingAdapter.getSavingsList();
+            for (SavingsRecord savingsRecord : savingsList)
+            {
+                Gson gson = new Gson();
+                String savingsData = gson.toJson(savingsRecord.getSavingsData());
+                savingsRecord.setJsonOfTodaysSavings(savingsData);
+            }
+
+            try
+            {
+                Dao<SavingsRecord, ?> dao = DatabaseHelper.getInstance(context).getDao(SavingsRecord.class);
+                if (savingsList != null)
+                {
+                    for (SavingsRecord savingsRecord : savingsList)
+                    {
+                        dao.createOrUpdate(savingsRecord.makeDatabaseSavingsRecord());
+                    }
+                }
+                RecordSavingsActivity.getLaunchIntent(context);
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+                Toast.makeText(context, "There seems to be a bug, please fix me", Toast.LENGTH_SHORT).show();
+            }
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

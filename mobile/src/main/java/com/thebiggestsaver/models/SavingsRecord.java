@@ -3,13 +3,15 @@ package com.thebiggestsaver.models;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.List;
+
 /**
  * Created by patriciaestridge on 9/1/14.
  */
 @DatabaseTable
 public class SavingsRecord {
     private SavingsType savingsType;
-    private SavingsData[] savingsData;
+    private List<SavingsData> savingsData;
     @DatabaseField
     private String title;
     @DatabaseField
@@ -25,12 +27,12 @@ public class SavingsRecord {
     @DatabaseField
     private Integer multiplier;
 
-    public SavingsData[] getSavingsData()
+    public List<SavingsData> getSavingsData()
     {
         return savingsData;
     }
 
-    public void setSavingsData(SavingsData[] savingsData)
+    public void setSavingsData(List<SavingsData> savingsData)
     {
         this.savingsData = savingsData;
     }
