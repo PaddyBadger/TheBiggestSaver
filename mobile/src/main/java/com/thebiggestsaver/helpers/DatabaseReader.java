@@ -1,11 +1,13 @@
 package com.thebiggestsaver.helpers;
 
 import android.content.Context;
-
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.j256.ormlite.dao.Dao;
+import com.thebiggestsaver.models.SavingsData;
 import com.thebiggestsaver.models.SavingsRecord;
 import com.thebiggestsaver.models.SavingsType;
-
+import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,11 @@ public class DatabaseReader
                     storedSavingsRecord.setSavingsType(savingsType);
                 }
             }
+
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<SavingsData>>(){}.getType();
+            List<SavingsData> data = gson.fromJson(storedSavingsRecord.getJsonOfTodaysSavings(), type);
+            storedSavingsRecord.setSavingsData(data);
         }
         return savingsRecords;
     }

@@ -23,7 +23,6 @@
         <activity
             android:name=".activities.RecordSavingsActivity"
             android:label="@string/app_name">
-
         </activity>
     </application>
 

@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.j256.ormlite.dao.Dao;
 import com.thebiggestsaver.R;
@@ -22,11 +21,9 @@ import com.thebiggestsaver.helpers.DatabaseHelper;
 import com.thebiggestsaver.helpers.DatabaseReader;
 import com.thebiggestsaver.models.SavingsRecord;
 import com.thebiggestsaver.utils.DimeUi;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -114,7 +111,6 @@ public class RecordSavingsActivity extends FragmentActivity
                         dao.createOrUpdate(savingsRecord.makeDatabaseSavingsRecord());
                     }
                 }
-                RecordSavingsActivity.getLaunchIntent(context);
             } catch (SQLException e)
             {
                 e.printStackTrace();

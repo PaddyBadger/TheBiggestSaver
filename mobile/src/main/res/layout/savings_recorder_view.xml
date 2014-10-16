@@ -29,14 +29,14 @@
             android:textSize="16sp" />
 
         <LinearLayout
-            android:id="@+id/recorder_icon_holder_vertical"
+            android:id="@+id/recorder_icon_holder_horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginLeft="@dimen/activity_vertical_margin"
             android:layout_marginRight="@dimen/padding_xxlarge"
             android:elevation="7dp"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_gravity="center"
             android:gravity="center">
         </LinearLayout>
