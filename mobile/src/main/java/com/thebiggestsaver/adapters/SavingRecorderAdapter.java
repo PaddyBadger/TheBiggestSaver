@@ -6,13 +6,10 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -62,105 +59,28 @@ public class SavingRecorderAdapter extends RecyclerView.Adapter<SavingRecorderAd
     public void onBindViewHolder(SavingRecorderAdapter.ViewHolder viewHolder, int position)
     {
         final SavingsRecord item = savings.get(position);
-
-        String colorString = item.getSavingsType().getColor();
-        int colorForIcons = Color.parseColor(colorString);
-
-        createNextandBackViews(viewHolder, item, colorForIcons);
         createSavingsIcons(viewHolder, item);
     }
 
-    public void createNextandBackViews(ViewHolder viewHolder, SavingsRecord item, int colorForIcons)
-    {
-        List<Integer> iconArray = new ArrayList<Integer>();
-        iconArray.add(R.drawable.back);
-        iconArray.add(R.drawable.next);
-
-        iconsForSavingsRecord = uiHelper.buildDrawableStateList(context, iconArray, colorForIcons, DimeUi.IconOrBack.icon);
-
-        List<Integer> backArray = new ArrayList<Integer>();
-        backArray.add(R.drawable.backing_circle);
-        backArray.add(R.drawable.backing_circle);
-
-        backDropForSavingsRecord = uiHelper.buildDrawableStateList(context, iconArray, colorForIcons, DimeUi.IconOrBack.back);
-
-        viewHolder.nextIcon.setImageDrawable(iconsForSavingsRecord.get(1));
-        viewHolder.nextIconBack.setImageDrawable(backDropForSavingsRecord.get(1));
-        viewHolder.backIcon.setImageDrawable(iconsForSavingsRecord.get(0));
-        viewHolder.backBack.setImageDrawable(backDropForSavingsRecord.get(0));
-
-        onNextClicked(viewHolder);
-    }
-
-    private void onNextClicked(final ViewHolder viewHolder)
-    {
-        viewHolder.nextContainer.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-
-                view.setVisibility(View.GONE);
-
-                viewHolder.summaryTextOnIcons.setVisibility(View.GONE);
-                viewHolder.savingsView.setVisibility(View.VISIBLE);
-
-                TranslateAnimation anim = new TranslateAnimation(1000, 0, 0, 0);
-                anim.setDuration(500);
-                anim.setInterpolator(new LinearInterpolator());
-                anim.setRepeatCount(0);
-                anim.setFillAfter(false);
-                viewHolder.savingsView.startAnimation(anim);
-                viewHolder.backContainer.setVisibility(View.VISIBLE);
-                onBackClicked(viewHolder);
-            }
-        });
-    }
-
-    private void onBackClicked(final ViewHolder viewHolder)
-    {
-        viewHolder.backContainer.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(final View view)
-            {
-
-                TranslateAnimation anim = new TranslateAnimation(0, 1200, 0, 0);
-                anim.setDuration(1000);
-                anim.setInterpolator(new LinearInterpolator());
-                anim.setRepeatCount(0);
-                anim.setFillAfter(false);
-
-                viewHolder.savingsView.startAnimation(anim);
-                viewHolder.summaryTextOnIcons.setVisibility(View.VISIBLE);
-                viewHolder.nextContainer.setVisibility(View.VISIBLE);
-
-                new Handler().postDelayed(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        viewHolder.savingsView.setVisibility(View.GONE);
-                        viewHolder.backContainer.setVisibility(View.GONE);
-                        onNextClicked(viewHolder);
-                    }
-                }, 1000);
-            }
-        });
-    }
-
-    public void createSavingsIcons(final ViewHolder viewHolder, final SavingsRecord item)
+    private void createSavingsIcons(final ViewHolder viewHolder, final SavingsRecord item)
     {
         String iconString = item.getSavingsTypeId();
         int iconId = context.getResources().getIdentifier(iconString, "drawable", context.getPackageName());
 
         final List<DisplayData> dataToDisplay = createListOfDisplayData(item);
+
+        List<Drawable> iconsForState = createDrawablesForState(iconId, dataToDisplay);
+        List<ImageView> imageViews = null;
+        viewHolder.iconHolderContainer.removeAllViews();
+        viewHolder.iconHolderContainerTwo.removeAllViews();
+        imageViews = new ArrayList<ImageView>();
+        renderData(viewHolder, item, dataToDisplay, iconsForState, imageViews);
         int occurences = calculateOccurences(item);
+        displaySummaryOnItem(viewHolder, item, occurences);
+    }
 
-        String amountSavedString = item.getAmount().replace("$","");
-        double amountSaved = Double.parseDouble(amountSavedString) * occurences;
-        viewHolder.summaryTextOnIcons.setText(item.getTitle() + ": $" + amountSaved);
-
+    private List<Drawable> createDrawablesForState(int iconId, List<DisplayData> dataToDisplay)
+    {
         List<Drawable> iconsForState = null;
         iconsForState = new ArrayList<Drawable>();
         for (DisplayData displayData : dataToDisplay)
@@ -173,11 +93,14 @@ public class SavingRecorderAdapter extends RecyclerView.Adapter<SavingRecorderAd
             drawable.setTint(iconColorTint, PorterDuff.Mode.MULTIPLY);
             iconsForState.add(drawable);
         }
+        return iconsForState;
+    }
 
-        List<ImageView> imageViews = null;
-        viewHolder.iconHolder.removeAllViews();
-        imageViews = new ArrayList<ImageView>();
-        renderData(viewHolder, item, dataToDisplay, iconsForState, imageViews);
+    private void displaySummaryOnItem(ViewHolder viewHolder, SavingsRecord item, int occurences)
+    {
+        String amountSavedString = item.getAmount().replace("$", "");
+        double amountSaved = Double.parseDouble(amountSavedString) * occurences;
+        viewHolder.summaryTextOnIcons.setText(item.getTitle() + ": $" + amountSaved);
     }
 
     private List<DisplayData> createListOfDisplayData(SavingsRecord item)
@@ -203,9 +126,9 @@ public class SavingRecorderAdapter extends RecyclerView.Adapter<SavingRecorderAd
                 }
             }
 
-            if (dataToDisplay.size() < 3)
+            if (dataToDisplay.size() <= 2)
             {
-                while (dataToDisplay.size() < 3)
+                while (dataToDisplay.size() <= 2)
                 {
                     dataToDisplay.add(newData);
                 }
@@ -221,11 +144,11 @@ public class SavingRecorderAdapter extends RecyclerView.Adapter<SavingRecorderAd
     private Integer calculateOccurences(SavingsRecord item)
     {
         int occurences = 0;
-        if (item.getSavingsData()!=null)
+        if (item.getSavingsData() != null)
         {
             for (SavingsData data : item.getSavingsData())
             {
-                occurences+= data.getAmount();
+                occurences += data.getAmount();
             }
         }
         return occurences;
@@ -246,17 +169,38 @@ public class SavingRecorderAdapter extends RecyclerView.Adapter<SavingRecorderAd
 
     private void renderData(final ViewHolder viewHolder, final SavingsRecord item, final List<DisplayData> dataToDisplay, List<Drawable> iconsForState, final List<ImageView> imageViews)
     {
-        int idHelper = 0;
-        for (Drawable drawable : iconsForState)
-        {
-            View iconView = LayoutInflater.from(context).inflate(R.layout.icon_view, viewHolder.iconHolder, false);
-            viewHolder.iconHolder.addView(iconView);
+        List<Drawable> firstRow = null;
+        firstRow = new ArrayList<Drawable>();
+        List<Drawable> secondRow = null;
+        secondRow = new ArrayList<Drawable>();
+        firstRow = splitData(iconsForState, firstRow, secondRow);
 
-            ImageView imageView = (ImageView) iconView.findViewById(R.id.saving_icon_one);
-            imageView.setId(idHelper);
-            imageViews.add(imageView);
-            imageView.setImageDrawable(drawable);
-            idHelper++;
+        if (iconsForState.size() > 4)
+        {
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewHolder.iconHolderContainer.getLayoutParams();
+            params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+            viewHolder.iconHolderContainer.setLayoutParams(params);
+        } else {
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewHolder.iconHolderContainer.getLayoutParams();
+            params.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+            viewHolder.iconHolderContainer.setLayoutParams(params);
+            viewHolder.iconHolderContainerTwo.setVisibility(View.GONE);
+        }
+
+        int idHelper = 0;
+        for (Drawable drawable : firstRow)
+        {
+            View iconView = LayoutInflater.from(context).inflate(R.layout.icon_view, viewHolder.iconHolderContainer, false);
+            viewHolder.iconHolderContainer.addView(iconView);
+            idHelper = addDrawable(imageViews, idHelper, drawable, iconView);
+        }
+        for (Drawable drawable : secondRow)
+        {
+            View iconViewTwo = LayoutInflater.from(context).inflate(R.layout.icon_view, viewHolder.iconHolderContainerTwo, false);
+            viewHolder.iconHolderContainerTwo.setVisibility(View.VISIBLE);
+            viewHolder.iconHolderContainerTwo.addView(iconViewTwo);
+            idHelper = addDrawable(imageViews, idHelper, drawable, iconViewTwo);
         }
 
         for (ImageView imageView : imageViews)
@@ -270,6 +214,39 @@ public class SavingRecorderAdapter extends RecyclerView.Adapter<SavingRecorderAd
                 }
             });
         }
+    }
+
+    private List<Drawable> splitData(List<Drawable> iconsForState, List<Drawable> firstRow, List<Drawable> secondRow)
+    {
+        if (iconsForState.size() > 4)
+        {
+            int halfWay = iconsForState.size() / 2;
+            int count = 0;
+            for (Drawable drawable : iconsForState)
+            {
+                if (count < halfWay)
+                {
+                    firstRow.add(drawable);
+                } else
+                {
+                    secondRow.add(drawable);
+                }
+                count++;
+            }
+        } else {
+            firstRow = iconsForState;
+        }
+        return firstRow;
+    }
+
+    private int addDrawable(List<ImageView> imageViews, int idHelper, Drawable drawable, View iconView)
+    {
+        ImageView imageView = (ImageView) iconView.findViewById(R.id.saving_icon_one);
+        imageView.setId(idHelper);
+        imageViews.add(imageView);
+        imageView.setImageDrawable(drawable);
+        idHelper++;
+        return idHelper;
     }
 
     private void addOrRemoveDataDisplayItem(View view, ViewHolder viewHolder, SavingsRecord item, List<DisplayData> dataToDisplay, List<ImageView> imageViews)
@@ -296,18 +273,36 @@ public class SavingRecorderAdapter extends RecyclerView.Adapter<SavingRecorderAd
 
         } else
         {
-            removeSavingsRecordDisplayData(viewHolder, item);
+            removeSavingsRecordDisplayData(viewHolder, item, dataPosition);
         }
     }
 
-    public void removeSavingsRecordDisplayData(ViewHolder viewHolder, SavingsRecord item)
+    public void removeSavingsRecordDisplayData(ViewHolder viewHolder, SavingsRecord item, int positionUnChecked)
     {
         List<SavingsData> savingsData = item.getSavingsData();
-        SavingsData lastItem = savingsData.get(savingsData.size() - 1);
-        List<DisplayData> displayData = lastItem.getDisplayData();
-        displayData.remove(displayData.size() - 1);
-        lastItem.setAmount(displayData.size());
-
+        int checkForPosition = 0;
+        int datPosition = 0;
+        int displayDataPosition = 0;
+        int positionInData = 0;
+        int positionInDD = 0;
+        for (SavingsData data : savingsData)
+        {
+            List<DisplayData> displayData = data.getDisplayData();
+            for (DisplayData displayData1 : displayData)
+            {
+                if (checkForPosition==positionUnChecked)
+                {
+                    positionInData = datPosition;
+                    positionInDD = displayDataPosition;
+                }
+                checkForPosition++;
+                displayDataPosition++;
+            }
+            datPosition++;
+        }
+        savingsData.get(positionInData).getDisplayData().remove(positionInDD);
+        int size = savingsData.get(positionInData).getDisplayData().size();
+        savingsData.get(positionInData).setAmount(size);
         createSavingsIcons(viewHolder, item);
     }
 
@@ -379,7 +374,8 @@ public class SavingRecorderAdapter extends RecyclerView.Adapter<SavingRecorderAd
         public RelativeLayout backContainer;
         public ImageView backIcon;
         public ImageView backBack;
-        public LinearLayout iconHolder;
+        public LinearLayout iconHolderContainer;
+        public LinearLayout iconHolderContainerTwo;
         public TextView amountSaved;
         public TextView timesSaved;
         public TextView daysSaved;
@@ -389,7 +385,9 @@ public class SavingRecorderAdapter extends RecyclerView.Adapter<SavingRecorderAd
             super(itemView);
             summaryTextOnIcons = (TextView) itemView.findViewById(R.id.saving_detail);
             summaryTextOnData = (TextView) itemView.findViewById(R.id.summary_title);
-            iconHolder = (LinearLayout) itemView.findViewById(R.id.recorder_icon_holder_horizontal);
+            iconHolderContainer = (LinearLayout) itemView.findViewById(R.id.recorder_icon_holder_horizontal);
+            iconHolderContainerTwo = (LinearLayout) itemView.findViewById(R.id.recorder_icon_holder_horizontal_two);
+
             nextContainer = (RelativeLayout) itemView.findViewById(R.id.nextIconContainer);
             nextIcon = (ImageView) itemView.findViewById(R.id.next_icon);
             nextIconBack = (ImageView) itemView.findViewById(R.id.nextIconBackk);

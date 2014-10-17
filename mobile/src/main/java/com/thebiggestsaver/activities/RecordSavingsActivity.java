@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.j256.ormlite.dao.Dao;
@@ -19,6 +20,7 @@ import com.thebiggestsaver.actionbars.BackBar;
 import com.thebiggestsaver.adapters.SavingRecorderAdapter;
 import com.thebiggestsaver.helpers.DatabaseHelper;
 import com.thebiggestsaver.helpers.DatabaseReader;
+import com.thebiggestsaver.models.SavingsData;
 import com.thebiggestsaver.models.SavingsRecord;
 import com.thebiggestsaver.utils.DimeUi;
 import java.sql.SQLException;
@@ -38,6 +40,12 @@ public class RecordSavingsActivity extends FragmentActivity
     private SavingRecorderAdapter savingRecordingAdapter;
     @InjectView(R.id.savings_pager)
     ViewPager savingsPager;
+    @InjectView(R.id.amount_saved)
+    TextView amountSaved;
+    @InjectView(R.id.days)
+    TextView days;
+    @InjectView(R.id.item_number)
+    TextView itemNumber;
 
     public static void getLaunchIntent(Context context)
     {
@@ -49,7 +57,7 @@ public class RecordSavingsActivity extends FragmentActivity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_saving_phone);
+        setContentView(R.layout.activity_saving);
 
         ButterKnife.inject(this);
         context = this;
@@ -72,11 +80,41 @@ public class RecordSavingsActivity extends FragmentActivity
         recyclerView.setHasFixedSize(true);
     }
 
-    public void renderContent()
+    private void renderContent()
     {
         DatabaseReader reader = new DatabaseReader();
         savingsRecords = reader.checkForExistingRecords(context);
         savingRecordingAdapter.dataSetChanged(savingsRecords);
+        calculateSavings(savingsRecords);
+    }
+
+    private void calculateSavings(List<SavingsRecord> savingsRecords)
+    {
+        int intItemNumber = 0;
+        int intDays = 0;
+        double intAmountSaved = 0;
+
+        for (SavingsRecord savingsRecord : savingsRecords)
+        {
+            if (savingsRecord.getSavingsData()!=null)
+            {
+                List<SavingsData> sd = savingsRecord.getSavingsData();
+                if (sd.size()>intDays)
+                {
+                    intDays = sd.size();
+                }
+                for (SavingsData savingsData : sd)
+                {
+                    intItemNumber += savingsData.getAmount();
+                }
+            }
+            String toParseToDouble = savingsRecord.getAmount().replace("$", "");
+            intAmountSaved += intItemNumber * Double.parseDouble(toParseToDouble);
+        }
+
+        days.setText(intDays + " Days");
+        amountSaved.setText("$" + intAmountSaved);
+        itemNumber.setText(intItemNumber + " Savings");
     }
 
     @Override

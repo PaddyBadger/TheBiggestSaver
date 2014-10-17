@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <View
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:elevation="5dp"
+        android:background="@color/white"
+        android:layout_margin="@dimen/activity_vertical_margin"/>
+
+    <com.thebiggestsaver.utils.typeface.TypefaceTextView
+        android:id="@+id/saving_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey_text"
+        android:layout_margin="24dp"
+        android:textSize="16sp"
+        android:text="Total Savings"
+        android:elevation="7dp"/>
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="horizontal"
+       android:layout_below="@+id/saving_title"
+       android:layout_margin="@dimen/activity_vertical_margin"
+       android:layout_gravity="center"
+       android:elevation="7dp">
+
+       <LinearLayout
+           android:layout_width="0dp"
+           android:layout_height="match_parent"
+           android:layout_weight="1"
+           android:orientation="vertical"
+          >
+
+           <com.thebiggestsaver.utils.typeface.TypefaceTextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="You Saved"
+               android:textColor="@color/grey_text"
+               android:textSize="@dimen/text_medium"
+               android:gravity="center"
+               android:paddingBottom="@dimen/padding_small"
+               />
+
+           <com.thebiggestsaver.utils.typeface.TypefaceTextView
+               android:id="@+id/amount_saved"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="You Saved"
+               android:textColor="@color/grey_text"
+               android:textSize="@dimen/text_small"
+               android:gravity="center"
+               android:paddingBottom="@dimen/padding_small"
+               />
+       </LinearLayout>
+       <View android:layout_width="0.5dp"
+             android:layout_height="40dp"
+             android:padding="@dimen/padding_small"
+             android:background="@color/grey_text"
+           />
+       <LinearLayout
+           android:layout_width="0dp"
+           android:layout_height="match_parent"
+           android:layout_weight="1"
+           android:orientation="vertical">
+
+           <com.thebiggestsaver.utils.typeface.TypefaceTextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="Over"
+               android:textColor="@color/grey_text"
+               android:textSize="@dimen/text_medium"
+               android:gravity="center"
+               android:paddingBottom="@dimen/padding_small"
+               />
+
+           <com.thebiggestsaver.utils.typeface.TypefaceTextView
+               android:id="@+id/days"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="0 days"
+               android:textColor="@color/grey_text"
+               android:textSize="@dimen/text_small"
+               android:gravity="center"
+               android:paddingBottom="@dimen/padding_small"
+               />
+       </LinearLayout>
+       <View android:layout_width="0.5dp"
+             android:layout_height="40dp"
+             android:padding="@dimen/padding_small"
+             android:background="@color/grey_text"
+           />
+       <LinearLayout
+           android:layout_width="0dp"
+           android:layout_height="match_parent"
+           android:layout_weight="1"
+           android:orientation="vertical">
+
+           <com.thebiggestsaver.utils.typeface.TypefaceTextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="On"
+               android:textColor="@color/grey_text"
+               android:textSize="@dimen/text_small"
+               android:gravity="center"
+               android:paddingBottom="@dimen/padding_small"
+               />
+
+
+           <com.thebiggestsaver.utils.typeface.TypefaceTextView
+               android:id="@+id/item_number"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="0 Savings"
+               android:textColor="@color/grey_text"
+               android:textSize="@dimen/text_small"
+               android:gravity="center"
+               android:paddingBottom="@dimen/padding_small"
+               />
+       </LinearLayout>
+
+
+   </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/addIconContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingRight="4dp"
+        android:elevation="10dp">
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -39,8 +39,6 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
     public List<SavingsRecord> savings = new ArrayList<SavingsRecord>();
     private Context context;
     private int itemLayout;
-    private List<StateListDrawable> iconsForSavingsRecord = new ArrayList<StateListDrawable>();
-    private List<StateListDrawable> backDropForSavingsRecord = new ArrayList<StateListDrawable>();
     private DimeUi uiHelper;
 
     public SavingListAdapter(Context context, List<SavingsRecord> savings, int itemLayout, DimeUi uiHelper)
@@ -82,6 +80,11 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         drawable.setTint(stateList, PorterDuff.Mode.MULTIPLY);
         viewHolder.image.setImageDrawable(drawable);
 
+        List<StateListDrawable> iconsForSavingsRecord = null;
+        iconsForSavingsRecord = new ArrayList<StateListDrawable>();
+        List<StateListDrawable> backDropForSavingsRecord = null;
+        backDropForSavingsRecord = new ArrayList<StateListDrawable>();
+
         List<Integer> iconArray = new ArrayList<Integer>();
         iconArray.add(R.drawable.back);
         iconArray.add(R.drawable.delete);
@@ -104,15 +107,15 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         viewHolder.acceptIconBack.setImageDrawable(backDropForSavingsRecord.get(3));
         viewHolder.backIconBack.setImageDrawable(backDropForSavingsRecord.get(0));
 
-        createNextIconView(viewHolder, position, item);
-        createDeleteIconView(viewHolder, position, item);
+        createNextIconView(viewHolder, position, item, iconsForSavingsRecord, backDropForSavingsRecord);
+        createDeleteIconView(viewHolder, position, item, iconsForSavingsRecord, backDropForSavingsRecord);
         createColorBackground(viewHolder, item);
         createNumberPickers(viewHolder, item, position);
         backOnClick(viewHolder);
-        createAcceptIconChange(viewHolder, item);
+        createAcceptIconChange(viewHolder, item, iconsForSavingsRecord);
     }
 
-    private void createAcceptIconChange(final ViewHolder viewHolder, final SavingsRecord item)
+    private void createAcceptIconChange(final ViewHolder viewHolder, final SavingsRecord item, final List<StateListDrawable> iconsForSavingsRecord)
     {
         viewHolder.acceptIconContainer.setOnClickListener(new View.OnClickListener()
         {
@@ -127,7 +130,7 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         });
     }
 
-    private void createDeleteIconView(final ViewHolder viewHolder, int i, final SavingsRecord item)
+    private void createDeleteIconView(final ViewHolder viewHolder, int i, final SavingsRecord item, final List<StateListDrawable> iconsForSavingsRecord, final List<StateListDrawable> backDropForSavingsRecord)
     {
         if (i == 0)
         {
@@ -159,7 +162,7 @@ public class SavingListAdapter extends RecyclerView.Adapter<SavingListAdapter.Vi
         });
     }
 
-    private void createNextIconView(ViewHolder viewHolder, int i, SavingsRecord item)
+    private void createNextIconView(ViewHolder viewHolder, int i, SavingsRecord item, final List<StateListDrawable> iconsForSavingsRecord, final List<StateListDrawable> backDropForSavingsRecord)
     {
         if (i == 0)
         {

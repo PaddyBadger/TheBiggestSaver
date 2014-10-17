@@ -31,17 +31,32 @@
         <LinearLayout
             android:id="@+id/recorder_icon_holder_horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_height="70dp"
             android:layout_marginLeft="@dimen/activity_vertical_margin"
-            android:layout_marginRight="@dimen/padding_xxlarge"
+            android:layout_marginRight="@dimen/padding_medium"
+            android:layout_marginTop="@dimen/padding_large"
             android:elevation="7dp"
             android:orientation="horizontal"
+            android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:gravity="center">
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/recorder_icon_holder_horizontal_two"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/padding_medium"
+            android:elevation="7dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_below="@+id/recorder_icon_holder_horizontal"
+            >
+        </LinearLayout>
 
         <RelativeLayout
+            android:visibility="gone"
             android:id="@+id/nextIconContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

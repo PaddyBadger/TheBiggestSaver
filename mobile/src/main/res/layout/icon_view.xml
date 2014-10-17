@@ -5,8 +5,8 @@
            android:id="@+id/saving_icon_one"
            android:layout_width="0dp"
            android:layout_weight="1"
-           android:layout_height="wrap_content"
+           android:layout_height="match_parent"
            android:layout_centerInParent="true"
-           android:padding="@dimen/padding_medium"
-           android:elevation="7dp"/>
+           android:padding="@dimen/padding_small"
+           android:elevation="9dp"/>
 

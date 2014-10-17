@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.j256.ormlite.dao.Dao;
@@ -56,8 +57,9 @@ public class SavingActivity extends FragmentActivity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_saving_phone);
+        setContentView(R.layout.activity_saving);
         ButterKnife.inject(this);
+        findViewById(R.id.header).setVisibility(View.GONE);
         context = this;
 
         createRecyclerView();
